@@ -6,7 +6,12 @@ type ReviewCardProps = {
   rating: number;
   content: string;
   createdAt: Date;
-  book: { title: string; author: string | null; coverUrl: string | null };
+  book: {
+    id: string;
+    title: string;
+    author: string | null;
+    coverUrl: string | null;
+  };
   user: { id: string; name: string | null; image: string | null };
 };
 
@@ -31,10 +36,13 @@ export default function ReviewCard({
         <div className="w-16 h-24 rounded bg-neutral-100 shrink-0" />
       )}
       <div className="min-w-0 flex-1">
-        <div className="text-xs text-neutral-500">
+        <Link
+          href={`/books/${book.id}`}
+          className="text-xs text-neutral-500 hover:underline"
+        >
           {book.title}
           {book.author ? ` · ${book.author}` : ""}
-        </div>
+        </Link>
         <StarRating rating={rating} />
         <p className="mt-1 text-sm text-neutral-800 line-clamp-3">{content}</p>
         <div className="mt-2 flex items-center gap-2 text-xs text-neutral-500">
