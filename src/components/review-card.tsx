@@ -13,6 +13,8 @@ type ReviewCardProps = {
     coverUrl: string | null;
   };
   user: { id: string; name: string | null; image: string | null };
+  likeCount?: number;
+  commentCount?: number;
 };
 
 export default function ReviewCard({
@@ -22,6 +24,8 @@ export default function ReviewCard({
   createdAt,
   book,
   user,
+  likeCount = 0,
+  commentCount = 0,
 }: ReviewCardProps) {
   return (
     <article className="flex gap-4 rounded-lg border border-neutral-200 bg-white p-4">
@@ -52,6 +56,10 @@ export default function ReviewCard({
           <span>·</span>
           <Link href={`/reviews/${id}`}>
             {createdAt.toLocaleDateString("ko-KR")}
+          </Link>
+          <span>·</span>
+          <Link href={`/reviews/${id}`} className="text-neutral-400">
+            ♥ {likeCount} · 💬 {commentCount}
           </Link>
         </div>
       </div>

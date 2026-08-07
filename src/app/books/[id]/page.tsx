@@ -22,6 +22,7 @@ export default async function BookDetailPage({ params }: Params) {
     include: {
       book: true,
       user: { select: { id: true, name: true, image: true } },
+      _count: { select: { likes: true, comments: true } },
     },
   });
 
@@ -82,6 +83,8 @@ export default async function BookDetailPage({ params }: Params) {
             createdAt={review.createdAt}
             book={review.book}
             user={review.user}
+            likeCount={review._count.likes}
+            commentCount={review._count.comments}
           />
         ))}
       </div>

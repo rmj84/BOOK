@@ -5,6 +5,8 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import StarRating from "@/components/star-rating";
 import { deleteReview } from "@/lib/actions/reviews";
+import { toggleLike } from "@/lib/actions/likes";
+import { addComment, deleteComment } from "@/lib/actions/comments";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -14,6 +16,7 @@ async function getReview(id: string) {
     include: {
       book: true,
       user: { select: { id: true, name: true, image: true } },
+      _count: { select: { likes: true, comments: true } },
     },
   });
 }
@@ -43,9 +46,25 @@ export default async function ReviewDetailPage({ params }: Params) {
   if (!review) notFound();
 
   const session = await auth();
-  const isOwner = session?.user?.id === review.userId;
+  const viewerId = session?.user?.id;
+  const isOwner = viewerId === review.userId;
 
   if (!review.isPublic && !isOwner) notFound();
+
+  const [isLiked, comments] = await Promise.all([
+    viewerId
+      ? prisma.like
+          .findUnique({
+            where: { userId_reviewId: { userId: viewerId, reviewId: id } },
+          })
+          .then(Boolean)
+      : Promise.resolve(false),
+    prisma.comment.findMany({
+      where: { reviewId: id },
+      orderBy: { createdAt: "asc" },
+      include: { user: { select: { id: true, name: true, image: true } } },
+    }),
+  ]);
 
   return (
     <article className="flex flex-col gap-4">
@@ -61,7 +80,9 @@ export default async function ReviewDetailPage({ params }: Params) {
           <div className="w-24 h-36 rounded bg-neutral-100 shrink-0" />
         )}
         <div>
-          <h1 className="text-xl font-semibold">{review.book.title}</h1>
+          <Link href={`/books/${review.book.id}`} className="hover:underline">
+            <h1 className="text-xl font-semibold">{review.book.title}</h1>
+          </Link>
           <p className="text-neutral-500">{review.book.author}</p>
           <StarRating rating={review.rating} />
         </div>
@@ -76,24 +97,89 @@ export default async function ReviewDetailPage({ params }: Params) {
         <span>{review.createdAt.toLocaleDateString("ko-KR")}</span>
       </div>
 
-      {isOwner && (
-        <div className="flex gap-3 pt-2">
-          <Link
-            href={`/reviews/${review.id}/edit`}
-            className="text-sm rounded border border-neutral-300 px-3 py-1.5"
+      <div className="flex items-center gap-3">
+        <form action={toggleLike.bind(null, review.id)}>
+          <button
+            type="submit"
+            className={
+              isLiked
+                ? "rounded border border-red-300 bg-red-50 text-red-600 px-3 py-1.5 text-sm"
+                : "rounded border border-neutral-300 px-3 py-1.5 text-sm"
+            }
           >
-            수정
-          </Link>
-          <form action={deleteReview.bind(null, review.id)}>
+            {isLiked ? "♥" : "♡"} 좋아요 {review._count.likes}
+          </button>
+        </form>
+
+        {isOwner && (
+          <>
+            <Link
+              href={`/reviews/${review.id}/edit`}
+              className="text-sm rounded border border-neutral-300 px-3 py-1.5"
+            >
+              수정
+            </Link>
+            <form action={deleteReview.bind(null, review.id)}>
+              <button
+                type="submit"
+                className="text-sm rounded border border-red-300 text-red-600 px-3 py-1.5"
+              >
+                삭제
+              </button>
+            </form>
+          </>
+        )}
+      </div>
+
+      <section className="flex flex-col gap-3 pt-4 border-t border-neutral-200">
+        <h2 className="text-sm font-semibold">댓글 {comments.length}개</h2>
+
+        {viewerId && (
+          <form
+            action={addComment.bind(null, review.id)}
+            className="flex gap-2"
+          >
+            <input
+              name="content"
+              required
+              placeholder="댓글을 남겨보세요"
+              className="flex-1 rounded border border-neutral-300 px-3 py-2 text-sm"
+            />
             <button
               type="submit"
-              className="text-sm rounded border border-red-300 text-red-600 px-3 py-1.5"
+              className="rounded bg-neutral-900 text-white px-3 text-sm"
             >
-              삭제
+              등록
             </button>
           </form>
-        </div>
-      )}
+        )}
+
+        <ul className="flex flex-col gap-3">
+          {comments.map((comment) => (
+            <li key={comment.id} className="text-sm">
+              <div className="flex items-center gap-2">
+                <Link
+                  href={`/u/${comment.user.id}`}
+                  className="font-medium text-neutral-700"
+                >
+                  {comment.user.name ?? "익명"}
+                </Link>
+                <span className="text-xs text-neutral-400">
+                  {comment.createdAt.toLocaleDateString("ko-KR")}
+                </span>
+                {viewerId === comment.userId && (
+                  <form action={deleteComment.bind(null, comment.id)}>
+                    <button type="submit" className="text-xs text-red-500">
+                      삭제
+                    </button>
+                  </form>
+                )}
+              </div>
+              <p className="text-neutral-800">{comment.content}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
     </article>
   );
 }

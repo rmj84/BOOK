@@ -62,6 +62,8 @@ model User {
   accounts Account[]
   sessions Session[]
   reviews  Review[]
+  likes    Like[]
+  comments Comment[]
 
   following Follow[] @relation("Follower")
   followers Follow[] @relation("Following")
@@ -94,8 +96,37 @@ model Review {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   book Book @relation(fields: [bookId], references: [id], onDelete: Cascade)
 
+  likes    Like[]
+  comments Comment[]
+
   @@index([userId])
   @@index([bookId])
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  userId    String
+  reviewId  String
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, reviewId])
+  @@index([reviewId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  userId    String
+  reviewId  String
+  content   String
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  @@index([reviewId])
 }
 
 model Follow {

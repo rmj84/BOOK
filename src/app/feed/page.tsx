@@ -38,6 +38,7 @@ export default async function FeedPage() {
     include: {
       book: true,
       user: { select: { id: true, name: true, image: true } },
+      _count: { select: { likes: true, comments: true } },
     },
   });
 
@@ -77,6 +78,8 @@ export default async function FeedPage() {
             createdAt={review.createdAt}
             book={review.book}
             user={review.user}
+            likeCount={review._count.likes}
+            commentCount={review._count.comments}
           />
         ))}
       </div>

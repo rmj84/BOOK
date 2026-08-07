@@ -23,6 +23,7 @@ export default async function ProfilePage({ params }: Params) {
         include: {
           book: true,
           user: { select: { id: true, name: true, image: true } },
+          _count: { select: { likes: true, comments: true } },
         },
       }),
       prisma.follow.count({ where: { followingId: id } }),
@@ -88,6 +89,8 @@ export default async function ProfilePage({ params }: Params) {
             createdAt={review.createdAt}
             book={review.book}
             user={review.user}
+            likeCount={review._count.likes}
+            commentCount={review._count.comments}
           />
         ))}
       </div>
