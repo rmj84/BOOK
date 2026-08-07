@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { updateReview } from "@/lib/actions/reviews";
 import StarRatingInput from "@/components/star-rating-input";
+import SubmitButton from "@/components/submit-button";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -49,12 +50,12 @@ export default async function EditReviewPage({ params }: Params) {
         다른 사람에게 공개하기
       </label>
 
-      <button
-        type="submit"
-        className="rounded bg-neutral-900 text-white px-4 py-2.5 font-medium"
+      <SubmitButton
+        pendingText="저장 중..."
+        className="rounded bg-neutral-900 text-white px-4 py-2.5 font-medium disabled:opacity-50"
       >
         저장
-      </button>
+      </SubmitButton>
     </form>
   );
 }

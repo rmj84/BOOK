@@ -7,6 +7,7 @@ import StarRating from "@/components/star-rating";
 import { deleteReview } from "@/lib/actions/reviews";
 import { toggleLike } from "@/lib/actions/likes";
 import { addComment, deleteComment } from "@/lib/actions/comments";
+import SubmitButton from "@/components/submit-button";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -99,16 +100,16 @@ export default async function ReviewDetailPage({ params }: Params) {
 
       <div className="flex items-center gap-3">
         <form action={toggleLike.bind(null, review.id)}>
-          <button
-            type="submit"
+          <SubmitButton
+            pendingText="처리 중..."
             className={
               isLiked
-                ? "rounded border border-red-300 bg-red-50 text-red-600 px-3 py-1.5 text-sm"
-                : "rounded border border-neutral-300 px-3 py-1.5 text-sm"
+                ? "rounded border border-red-300 bg-red-50 text-red-600 px-3 py-1.5 text-sm disabled:opacity-50"
+                : "rounded border border-neutral-300 px-3 py-1.5 text-sm disabled:opacity-50"
             }
           >
             {isLiked ? "♥" : "♡"} 좋아요 {review._count.likes}
-          </button>
+          </SubmitButton>
         </form>
 
         {isOwner && (
@@ -120,12 +121,12 @@ export default async function ReviewDetailPage({ params }: Params) {
               수정
             </Link>
             <form action={deleteReview.bind(null, review.id)}>
-              <button
-                type="submit"
-                className="text-sm rounded border border-red-300 text-red-600 px-3 py-1.5"
+              <SubmitButton
+                pendingText="삭제 중..."
+                className="text-sm rounded border border-red-300 text-red-600 px-3 py-1.5 disabled:opacity-50"
               >
                 삭제
-              </button>
+              </SubmitButton>
             </form>
           </>
         )}
@@ -145,12 +146,12 @@ export default async function ReviewDetailPage({ params }: Params) {
               placeholder="댓글을 남겨보세요"
               className="flex-1 rounded border border-neutral-300 px-3 py-2 text-sm"
             />
-            <button
-              type="submit"
-              className="rounded bg-neutral-900 text-white px-3 text-sm"
+            <SubmitButton
+              pendingText="등록 중..."
+              className="rounded bg-neutral-900 text-white px-3 text-sm disabled:opacity-50"
             >
               등록
-            </button>
+            </SubmitButton>
           </form>
         )}
 
@@ -169,9 +170,12 @@ export default async function ReviewDetailPage({ params }: Params) {
                 </span>
                 {viewerId === comment.userId && (
                   <form action={deleteComment.bind(null, comment.id)}>
-                    <button type="submit" className="text-xs text-red-500">
+                    <SubmitButton
+                      pendingText="삭제 중..."
+                      className="text-xs text-red-500 disabled:opacity-50"
+                    >
                       삭제
-                    </button>
+                    </SubmitButton>
                   </form>
                 )}
               </div>

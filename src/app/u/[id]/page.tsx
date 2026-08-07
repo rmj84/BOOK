@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import ReviewCard from "@/components/review-card";
 import { toggleFollow } from "@/lib/actions/follow";
+import SubmitButton from "@/components/submit-button";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -60,16 +61,16 @@ export default async function ProfilePage({ params }: Params) {
         </div>
         {!isOwner && viewerId && (
           <form action={toggleFollow.bind(null, id)}>
-            <button
-              type="submit"
+            <SubmitButton
+              pendingText="처리 중..."
               className={
                 isFollowing
-                  ? "rounded border border-neutral-300 px-3 py-1.5 text-sm"
-                  : "rounded bg-neutral-900 text-white px-3 py-1.5 text-sm"
+                  ? "rounded border border-neutral-300 px-3 py-1.5 text-sm disabled:opacity-50"
+                  : "rounded bg-neutral-900 text-white px-3 py-1.5 text-sm disabled:opacity-50"
               }
             >
               {isFollowing ? "팔로잉" : "팔로우"}
-            </button>
+            </SubmitButton>
           </form>
         )}
       </div>

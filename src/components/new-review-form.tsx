@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createReview } from "@/lib/actions/reviews";
 import type { BookSearchResult } from "@/lib/books";
 import StarRatingInput from "@/components/star-rating-input";
+import SubmitButton from "@/components/submit-button";
 
 export default function NewReviewForm() {
   const [query, setQuery] = useState("");
@@ -188,12 +189,12 @@ export default function NewReviewForm() {
         다른 사람에게 공개하기
       </label>
 
-      <button
-        type="submit"
-        className="rounded bg-neutral-900 text-white px-4 py-2.5 font-medium"
+      <SubmitButton
+        pendingText="등록 중..."
+        className="rounded bg-neutral-900 text-white px-4 py-2.5 font-medium disabled:opacity-50"
       >
         후기 등록
-      </button>
+      </SubmitButton>
     </form>
   );
 }
