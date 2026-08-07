@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createReview } from "@/lib/actions/reviews";
 import type { BookSearchResult } from "@/lib/books";
+import StarRatingInput from "@/components/star-rating-input";
 
 export default function NewReviewForm() {
   const [query, setQuery] = useState("");
@@ -10,39 +11,52 @@ export default function NewReviewForm() {
   const [searching, setSearching] = useState(false);
   const [selected, setSelected] = useState<BookSearchResult | null>(null);
   const [manualMode, setManualMode] = useState(false);
-  const [rating, setRating] = useState(5);
 
-  async function handleSearch(e: React.FormEvent) {
-    e.preventDefault();
-    if (!query.trim()) return;
-    setSearching(true);
-    try {
-      const res = await fetch(`/api/books/search?q=${encodeURIComponent(query)}`);
-      const data = await res.json();
-      setResults(data.results ?? []);
-    } finally {
-      setSearching(false);
-    }
-  }
+  useEffect(() => {
+    const trimmed = query.trim();
+    if (!trimmed) return;
+
+    const controller = new AbortController();
+    const timer = setTimeout(async () => {
+      setSearching(true);
+      try {
+        const res = await fetch(
+          `/api/books/search?q=${encodeURIComponent(trimmed)}`,
+          { signal: controller.signal }
+        );
+        const data = await res.json();
+        setResults(data.results ?? []);
+      } catch (err) {
+        if ((err as Error).name !== "AbortError") setResults([]);
+      } finally {
+        setSearching(false);
+      }
+    }, 300);
+
+    return () => {
+      controller.abort();
+      clearTimeout(timer);
+    };
+  }, [query]);
+
+  const visibleResults = query.trim() ? results : [];
 
   if (!selected && !manualMode) {
     return (
       <div className="flex flex-col gap-4">
         <h1 className="text-xl font-semibold">어떤 책을 읽으셨나요?</h1>
-        <form onSubmit={handleSearch} className="flex gap-2">
+        <form onSubmit={(e) => e.preventDefault()} className="flex gap-2">
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="책 제목을 검색하세요"
             className="flex-1 rounded border border-neutral-300 px-3 py-2"
+            autoFocus
           />
-          <button
-            type="submit"
-            className="rounded bg-neutral-900 text-white px-4"
-          >
-            {searching ? "검색 중..." : "검색"}
-          </button>
         </form>
+        {searching && (
+          <p className="text-sm text-neutral-400">검색 중...</p>
+        )}
 
         <button
           type="button"
@@ -53,7 +67,7 @@ export default function NewReviewForm() {
         </button>
 
         <ul className="flex flex-col gap-2">
-          {results.map((book) => (
+          {visibleResults.map((book) => (
             <li key={book.externalId}>
               <button
                 type="button"
@@ -155,19 +169,7 @@ export default function NewReviewForm() {
 
       <div>
         <label className="block text-sm font-medium mb-1">별점</label>
-        <div className="flex gap-1 text-2xl">
-          {[1, 2, 3, 4, 5].map((n) => (
-            <button
-              key={n}
-              type="button"
-              onClick={() => setRating(n)}
-              className={n <= rating ? "text-amber-500" : "text-neutral-300"}
-            >
-              ★
-            </button>
-          ))}
-        </div>
-        <input type="hidden" name="rating" value={rating} />
+        <StarRatingInput name="rating" defaultValue={5} />
       </div>
 
       <div>

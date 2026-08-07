@@ -11,6 +11,10 @@ async function requireUserId() {
   return session.user.id;
 }
 
+function isValidRating(rating: number) {
+  return rating >= 1 && rating <= 5 && Number.isInteger(rating * 2);
+}
+
 type BookInput = {
   externalId: string | null;
   title: string;
@@ -51,7 +55,8 @@ export async function createReview(formData: FormData) {
   const content = String(formData.get("content") ?? "").trim();
   const isPublic = formData.get("isPublic") === "on";
 
-  if (rating < 1 || rating > 5) throw new Error("별점은 1~5 사이여야 합니다.");
+  if (!isValidRating(rating))
+    throw new Error("별점은 1~5 사이, 0.5점 단위여야 합니다.");
   if (!content) throw new Error("후기 내용을 입력해주세요.");
 
   const savedBook = await resolveBook(book);
@@ -83,7 +88,8 @@ export async function updateReview(reviewId: string, formData: FormData) {
   const content = String(formData.get("content") ?? "").trim();
   const isPublic = formData.get("isPublic") === "on";
 
-  if (rating < 1 || rating > 5) throw new Error("별점은 1~5 사이여야 합니다.");
+  if (!isValidRating(rating))
+    throw new Error("별점은 1~5 사이, 0.5점 단위여야 합니다.");
   if (!content) throw new Error("후기 내용을 입력해주세요.");
 
   await prisma.review.update({

@@ -85,7 +85,7 @@ model Review {
   id        String   @id @default(cuid())
   userId    String
   bookId    String
-  rating    Int // 1-5
+  rating    Float // 1~5, 0.5 단위
   content   String
   isPublic  Boolean  @default(true)
   createdAt DateTime @default(now())
