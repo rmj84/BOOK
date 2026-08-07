@@ -6,7 +6,7 @@
 
 - **Next.js 16** (App Router) + **TypeScript**, **React 19**
 - **Tailwind CSS v4**
-- **Prisma 6** + SQLite(로컬 개발) — 배포 시 PostgreSQL(Neon/Supabase 등)로 전환 가능
+- **Prisma 6** + PostgreSQL ([Neon](https://neon.tech) 호스팅)
 - **Auth.js (NextAuth v5)** + Google OAuth
 - **알라딘 OpenAPI** (기본 도서 검색 provider, `.env`의 `BOOK_SEARCH_PROVIDER`로 네이버/수동입력으로 전환 가능)
 
@@ -14,8 +14,8 @@
 
 ```bash
 npm install
-cp .env.example .env   # 이미 있다면 값 채우기
-npx prisma migrate dev
+cp .env.example .env   # 값 채우기
+npx prisma migrate deploy
 npm run dev
 ```
 
@@ -23,11 +23,14 @@ npm run dev
 
 | 변수 | 설명 |
 |---|---|
+| `DATABASE_URL` | Neon 등 호스팅 Postgres의 connection string |
 | `AUTH_SECRET` | `openssl rand -base64 32`로 생성 |
-| `AUTH_GOOGLE_ID` / `AUTH_GOOGLE_SECRET` | [Google Cloud Console](https://console.cloud.google.com/apis/credentials)에서 OAuth 클라이언트 ID 발급 (아직 미발급 — 로그인 기능을 쓰려면 필요) |
+| `AUTH_GOOGLE_ID` / `AUTH_GOOGLE_SECRET` | [Google Cloud Console](https://console.cloud.google.com/apis/credentials)에서 OAuth 클라이언트 ID 발급 (발급 완료) |
 | `ALADIN_TTB_KEY` | 알라딘 OpenAPI TTBKey (발급 완료) |
 | `NAVER_CLIENT_ID` / `NAVER_CLIENT_SECRET` | 네이버 책 검색 API (보조 provider, 발급 완료) |
 | `BOOK_SEARCH_PROVIDER` | `"aladin"` \| `"naver"` \| `"manual"` — 현재 `aladin` |
+
+`npm run build`는 배포 환경에서 `prisma migrate deploy`를 자동으로 실행하도록 되어 있어, Vercel에 올리면 DB 마이그레이션이 자동으로 적용됩니다.
 
 ## 데이터 모델
 
@@ -50,4 +53,4 @@ npm run dev
 - 좋아요 / 댓글
 - 책 상세 페이지 (책별 후기 모아보기)
 - 알림
-- 배포 (Vercel + 호스팅 Postgres)
+- 배포 (Vercel)

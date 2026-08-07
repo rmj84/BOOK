@@ -6,9 +6,7 @@ generator client {
 }
 
 datasource db {
-  // Local dev uses SQLite so the app runs with zero external setup.
-  // Switch to "postgresql" + a hosted DATABASE_URL (Neon/Supabase) for production.
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
