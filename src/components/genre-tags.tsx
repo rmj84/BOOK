@@ -15,7 +15,7 @@ export default function GenreTags({ category }: { category: string | null }) {
         <Link
           key={segment}
           href={`/genres/${encodeURIComponent(segment)}`}
-          className="rounded-full bg-neutral-100 px-2.5 py-1 text-xs text-neutral-600 hover:bg-neutral-200"
+          className="rounded-full bg-leaf-light px-2.5 py-1 text-xs text-ink/70 hover:bg-leaf/25"
         >
           #{segment}
         </Link>

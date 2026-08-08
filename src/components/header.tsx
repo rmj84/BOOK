@@ -9,7 +9,7 @@ type HeaderUser = {
 
 export default function Header({ user }: { user: HeaderUser }) {
   return (
-    <header className="border-b border-neutral-200 bg-white">
+    <header className="border-b border-leaf/20 bg-card">
       <div className="max-w-2xl mx-auto px-3 sm:px-4 h-14 flex items-center justify-between gap-2">
         <Link href="/" className="font-semibold text-lg shrink-0">
           북로그
@@ -26,7 +26,7 @@ export default function Header({ user }: { user: HeaderUser }) {
                   await signOut();
                 }}
               >
-                <button type="submit" className="text-neutral-500 shrink-0">
+                <button type="submit" className="text-ink/55 shrink-0">
                   로그아웃
                 </button>
               </form>
@@ -41,7 +41,7 @@ export default function Header({ user }: { user: HeaderUser }) {
             >
               <button
                 type="submit"
-                className="rounded bg-neutral-900 text-white px-3 py-1.5"
+                className="rounded bg-leaf hover:bg-leaf-dark text-white px-3 py-1.5"
               >
                 로그인
               </button>

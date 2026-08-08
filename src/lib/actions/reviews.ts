@@ -60,7 +60,7 @@ export async function createReview(formData: FormData) {
   const isPublic = formData.get("isPublic") === "on";
 
   if (!isValidRating(rating))
-    throw new Error("별점은 1~5 사이, 0.5점 단위여야 합니다.");
+    throw new Error("잎점수는 1~5 사이, 0.5 단위여야 합니다.");
   if (!content) throw new Error("후기 내용을 입력해주세요.");
 
   const savedBook = await resolveBook(book);
@@ -94,7 +94,7 @@ export async function updateReview(reviewId: string, formData: FormData) {
   const isPublic = formData.get("isPublic") === "on";
 
   if (!isValidRating(rating))
-    throw new Error("별점은 1~5 사이, 0.5점 단위여야 합니다.");
+    throw new Error("잎점수는 1~5 사이, 0.5 단위여야 합니다.");
   if (!content) throw new Error("후기 내용을 입력해주세요.");
 
   await prisma.review.update({

@@ -28,21 +28,21 @@ export default function BookShelf({
               <img
                 src={book.coverUrl}
                 alt={book.title}
-                className="w-28 h-40 object-cover rounded border border-neutral-200 bg-white"
+                className="w-28 h-40 object-cover rounded border border-leaf/20 bg-card"
               />
             ) : (
-              <div className="w-28 h-40 rounded border border-neutral-200 bg-neutral-100" />
+              <div className="w-28 h-40 rounded border border-leaf/20 bg-leaf-light" />
             )}
             <div className="mt-1 text-xs font-medium line-clamp-2">
               {book.title}
             </div>
             {book.avgRating !== undefined && (
-              <div className="text-xs text-amber-600">
-                ★ {book.avgRating.toFixed(1)}
+              <div className="text-xs text-leaf-dark">
+                🍃 {book.avgRating.toFixed(1)}
               </div>
             )}
             {book.reviewCount !== undefined && (
-              <div className="text-xs text-neutral-400">
+              <div className="text-xs text-ink/40">
                 후기 {book.reviewCount}개
               </div>
             )}

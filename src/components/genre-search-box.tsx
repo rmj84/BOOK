@@ -24,11 +24,11 @@ export default function GenreSearchBox({
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder="장르/태그로 검색 (예: 한국소설)"
-        className="flex-1 rounded border border-neutral-300 px-3 py-2 text-sm"
+        className="flex-1 rounded border border-leaf/25 px-3 py-2 text-sm"
       />
       <button
         type="submit"
-        className="rounded bg-neutral-900 text-white px-3 text-sm"
+        className="rounded bg-leaf hover:bg-leaf-dark text-white px-3 text-sm"
       >
         검색
       </button>

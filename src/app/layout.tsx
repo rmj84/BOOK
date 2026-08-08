@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Nanum_Pen_Script, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { auth } from "@/lib/auth";
 import Header from "@/components/header";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Google Fonts는 나눔손글씨 펜 계열을 별도 "korean" 서브셋으로 나누지 않고
+// "latin" 하나로만 제공하는데, 이 파일 자체에 한글 글리프가 포함되어 있다.
+const pen = Nanum_Pen_Script({
+  variable: "--font-pen",
   subsets: ["latin"],
+  weight: "400",
 });
 
 const geistMono = Geist_Mono({
@@ -25,9 +28,9 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="ko"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${pen.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-neutral-50 text-neutral-900">
+      <body className="min-h-full flex flex-col bg-paper text-ink">
         <Header user={session?.user ?? null} />
         <main className="flex-1 w-full max-w-2xl mx-auto px-4 py-6">
           {children}

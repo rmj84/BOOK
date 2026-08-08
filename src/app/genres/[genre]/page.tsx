@@ -19,7 +19,7 @@ export default async function GenrePage({ params }: Params) {
       <GenreSearchBox defaultValue={genre} />
 
       {books.length === 0 && (
-        <p className="text-neutral-500 text-sm py-10 text-center">
+        <p className="text-ink/55 text-sm py-10 text-center">
           이 태그로 등록된 책이 아직 없어요.
         </p>
       )}
@@ -32,10 +32,10 @@ export default async function GenrePage({ params }: Params) {
               <img
                 src={book.coverUrl}
                 alt={book.title}
-                className="w-full aspect-[2/3] object-cover rounded border border-neutral-200 bg-white"
+                className="w-full aspect-[2/3] object-cover rounded border border-leaf/20 bg-card"
               />
             ) : (
-              <div className="w-full aspect-[2/3] rounded border border-neutral-200 bg-neutral-100" />
+              <div className="w-full aspect-[2/3] rounded border border-leaf/20 bg-leaf-light" />
             )}
             <div className="mt-1 text-xs font-medium line-clamp-2">
               {book.title}

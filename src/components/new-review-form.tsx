@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { createReview } from "@/lib/actions/reviews";
 import type { BookSearchResult } from "@/lib/books";
-import StarRatingInput from "@/components/star-rating-input";
+import LeafScoreInput from "@/components/leaf-score-input";
 import SubmitButton from "@/components/submit-button";
 
 export default function NewReviewForm() {
@@ -51,18 +51,18 @@ export default function NewReviewForm() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="책 제목을 검색하세요"
-            className="flex-1 rounded border border-neutral-300 px-3 py-2"
+            className="flex-1 rounded border border-leaf/25 px-3 py-2"
             autoFocus
           />
         </form>
         {searching && (
-          <p className="text-sm text-neutral-400">검색 중...</p>
+          <p className="text-sm text-ink/40">검색 중...</p>
         )}
 
         <button
           type="button"
           onClick={() => setManualMode(true)}
-          className="text-sm text-neutral-500 self-start underline"
+          className="text-sm text-ink/55 self-start underline"
         >
           검색 결과에 없나요? 직접 입력하기
         </button>
@@ -73,7 +73,7 @@ export default function NewReviewForm() {
               <button
                 type="button"
                 onClick={() => setSelected(book)}
-                className="flex w-full gap-3 rounded border border-neutral-200 bg-white p-3 text-left hover:border-neutral-400"
+                className="flex w-full gap-3 rounded border border-leaf/20 bg-card p-3 text-left hover:border-leaf/50"
               >
                 {book.coverUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -83,11 +83,11 @@ export default function NewReviewForm() {
                     className="w-12 h-16 object-cover rounded shrink-0"
                   />
                 ) : (
-                  <div className="w-12 h-16 rounded bg-neutral-100 shrink-0" />
+                  <div className="w-12 h-16 rounded bg-leaf-light shrink-0" />
                 )}
                 <div className="min-w-0">
                   <div className="font-medium truncate">{book.title}</div>
-                  <div className="text-sm text-neutral-500 truncate">
+                  <div className="text-sm text-ink/55 truncate">
                     {book.author} {book.publisher ? `· ${book.publisher}` : ""}
                   </div>
                 </div>
@@ -118,7 +118,7 @@ export default function NewReviewForm() {
           setSelected(null);
           setManualMode(false);
         }}
-        className="text-sm text-neutral-500 self-start underline"
+        className="text-sm text-ink/55 self-start underline"
       >
         ← 다시 선택하기
       </button>
@@ -129,12 +129,12 @@ export default function NewReviewForm() {
             name="title"
             required
             placeholder="책 제목"
-            className="rounded border border-neutral-300 px-3 py-2"
+            className="rounded border border-leaf/25 px-3 py-2"
           />
           <input
             name="author"
             placeholder="저자"
-            className="rounded border border-neutral-300 px-3 py-2"
+            className="rounded border border-leaf/25 px-3 py-2"
           />
           <input type="hidden" name="externalId" value="" />
           <input type="hidden" name="publisher" value="" />
@@ -144,7 +144,7 @@ export default function NewReviewForm() {
           <input type="hidden" name="purchaseUrl" value="" />
         </div>
       ) : (
-        <div className="flex gap-3 rounded border border-neutral-200 bg-white p-3">
+        <div className="flex gap-3 rounded border border-leaf/20 bg-card p-3">
           {book.coverUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -153,11 +153,11 @@ export default function NewReviewForm() {
               className="w-12 h-16 object-cover rounded shrink-0"
             />
           ) : (
-            <div className="w-12 h-16 rounded bg-neutral-100 shrink-0" />
+            <div className="w-12 h-16 rounded bg-leaf-light shrink-0" />
           )}
           <div>
             <div className="font-medium">{book.title}</div>
-            <div className="text-sm text-neutral-500">{book.author}</div>
+            <div className="text-sm text-ink/55">{book.author}</div>
           </div>
           <input type="hidden" name="title" value={book.title} />
           <input type="hidden" name="author" value={book.author ?? ""} />
@@ -179,8 +179,8 @@ export default function NewReviewForm() {
       )}
 
       <div>
-        <label className="block text-sm font-medium mb-1">별점</label>
-        <StarRatingInput name="rating" defaultValue={5} />
+        <label className="block text-sm font-medium mb-1">잎점수</label>
+        <LeafScoreInput name="rating" defaultValue={5} />
       </div>
 
       <div>
@@ -189,7 +189,7 @@ export default function NewReviewForm() {
           name="content"
           required
           rows={6}
-          className="w-full rounded border border-neutral-300 px-3 py-2"
+          className="w-full rounded border border-leaf/25 px-3 py-2"
           placeholder="이 책에 대한 생각을 자유롭게 적어주세요."
         />
       </div>
@@ -201,7 +201,7 @@ export default function NewReviewForm() {
 
       <SubmitButton
         pendingText="등록 중..."
-        className="rounded bg-neutral-900 text-white px-4 py-2.5 font-medium disabled:opacity-50"
+        className="rounded bg-leaf hover:bg-leaf-dark text-white px-4 py-2.5 font-medium disabled:opacity-50"
       >
         후기 등록
       </SubmitButton>

@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import ReviewCard from "@/components/review-card";
-import StarRating from "@/components/star-rating";
+import LeafScore from "@/components/leaf-score";
 import GenreTags from "@/components/genre-tags";
 import BuyButton from "@/components/buy-button";
 
@@ -44,18 +44,18 @@ export default async function BookDetailPage({ params }: Params) {
             className="w-28 h-40 object-cover rounded shrink-0"
           />
         ) : (
-          <div className="w-28 h-40 rounded bg-neutral-100 shrink-0" />
+          <div className="w-28 h-40 rounded bg-leaf-light shrink-0" />
         )}
         <div>
           <h1 className="text-xl font-semibold">{book.title}</h1>
-          <p className="text-neutral-500">
+          <p className="text-ink/55">
             {book.author}
             {book.publisher ? ` · ${book.publisher}` : ""}
           </p>
           {reviews.length > 0 && (
             <div className="mt-1 flex items-center gap-2">
-              <StarRating rating={avgRating} />
-              <span className="text-sm text-neutral-500">
+              <LeafScore score={avgRating} />
+              <span className="text-sm text-ink/55">
                 {avgRating.toFixed(1)} ({reviews.length}명)
               </span>
             </div>
@@ -68,7 +68,7 @@ export default async function BookDetailPage({ params }: Params) {
       <BuyButton url={book.purchaseUrl} />
 
       {book.description && (
-        <p className="text-sm text-neutral-600 whitespace-pre-wrap">
+        <p className="text-sm text-ink/70 whitespace-pre-wrap">
           {book.description}
         </p>
       )}
@@ -76,7 +76,7 @@ export default async function BookDetailPage({ params }: Params) {
       <div className="flex flex-col gap-4">
         <h2 className="text-lg font-semibold">후기 {reviews.length}개</h2>
         {reviews.length === 0 && (
-          <p className="text-neutral-500 text-sm py-6 text-center">
+          <p className="text-ink/55 text-sm py-6 text-center">
             아직 이 책에 대한 후기가 없어요.
           </p>
         )}

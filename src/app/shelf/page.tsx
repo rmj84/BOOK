@@ -43,13 +43,13 @@ export default async function ShelfPage() {
         <h1 className="text-xl font-semibold">
           {isFollowingShelf ? "내 책장" : "모두의 책장"}
         </h1>
-        <Link href="/reviews/new" className="text-sm text-neutral-500">
+        <Link href="/reviews/new" className="text-sm text-ink/55">
           + 후기 쓰기
         </Link>
       </div>
 
       {!userId && (
-        <p className="text-sm text-neutral-500">
+        <p className="text-sm text-ink/55">
           로그인하면 팔로우한 사람들의 책장만 모아볼 수 있어요.
         </p>
       )}

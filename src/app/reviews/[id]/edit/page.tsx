@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { updateReview } from "@/lib/actions/reviews";
-import StarRatingInput from "@/components/star-rating-input";
+import LeafScoreInput from "@/components/leaf-score-input";
 import SubmitButton from "@/components/submit-button";
 
 type Params = { params: Promise<{ id: string }> };
@@ -26,8 +26,8 @@ export default async function EditReviewPage({ params }: Params) {
       <h1 className="text-xl font-semibold">{review.book.title} 후기 수정</h1>
 
       <div>
-        <label className="block text-sm font-medium mb-1">별점</label>
-        <StarRatingInput name="rating" defaultValue={review.rating} />
+        <label className="block text-sm font-medium mb-1">잎점수</label>
+        <LeafScoreInput name="rating" defaultValue={review.rating} />
       </div>
 
       <div>
@@ -37,7 +37,7 @@ export default async function EditReviewPage({ params }: Params) {
           required
           rows={6}
           defaultValue={review.content}
-          className="w-full rounded border border-neutral-300 px-3 py-2"
+          className="w-full rounded border border-leaf/25 px-3 py-2"
         />
       </div>
 
@@ -52,7 +52,7 @@ export default async function EditReviewPage({ params }: Params) {
 
       <SubmitButton
         pendingText="저장 중..."
-        className="rounded bg-neutral-900 text-white px-4 py-2.5 font-medium disabled:opacity-50"
+        className="rounded bg-leaf hover:bg-leaf-dark text-white px-4 py-2.5 font-medium disabled:opacity-50"
       >
         저장
       </SubmitButton>

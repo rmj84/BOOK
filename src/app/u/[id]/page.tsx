@@ -49,13 +49,13 @@ export default async function ProfilePage({ params }: Params) {
             className="w-16 h-16 rounded-full"
           />
         ) : (
-          <div className="w-16 h-16 rounded-full bg-neutral-200" />
+          <div className="w-16 h-16 rounded-full bg-leaf-light" />
         )}
         <div className="flex-1">
           <h1 className="text-xl font-semibold">
             {profileUser.name ?? "익명"}
           </h1>
-          <p className="text-sm text-neutral-500">
+          <p className="text-sm text-ink/55">
             팔로워 {followerCount} · 팔로잉 {followingCount}
           </p>
         </div>
@@ -65,8 +65,8 @@ export default async function ProfilePage({ params }: Params) {
               pendingText="처리 중..."
               className={
                 isFollowing
-                  ? "rounded border border-neutral-300 px-3 py-1.5 text-sm disabled:opacity-50"
-                  : "rounded bg-neutral-900 text-white px-3 py-1.5 text-sm disabled:opacity-50"
+                  ? "rounded border border-leaf/25 px-3 py-1.5 text-sm disabled:opacity-50"
+                  : "rounded bg-leaf hover:bg-leaf-dark text-white px-3 py-1.5 text-sm disabled:opacity-50"
               }
             >
               {isFollowing ? "팔로잉" : "팔로우"}
@@ -77,7 +77,7 @@ export default async function ProfilePage({ params }: Params) {
 
       <div className="flex flex-col gap-4">
         {reviews.length === 0 && (
-          <p className="text-neutral-500 text-sm py-10 text-center">
+          <p className="text-ink/55 text-sm py-10 text-center">
             아직 작성한 후기가 없어요.
           </p>
         )}

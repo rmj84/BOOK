@@ -37,7 +37,7 @@ npm run dev
 
 - `User`, `Account`, `Session`, `VerificationToken`: Auth.js 표준 모델
 - `Book`: 외부 API 도서 또는 수동 등록 도서
-- `Review`: 별점(1~5) + 텍스트 + 공개여부
+- `Review`: 잎점수(1~5, 0.5 단위) + 텍스트 + 공개여부
 - `Follow`: 유저 간 팔로우 관계
 
 ## 주요 화면
@@ -48,7 +48,7 @@ npm run dev
 - `/reviews/[id]` — 후기 상세 (OG 메타태그로 SNS 공유 미리보기 지원)
 - `/reviews/[id]/edit` — 후기 수정 (작성자만)
 - `/u/[id]` — 프로필 (팔로우/언팔로우, 작성한 후기 목록)
-- `/books/[id]` — 책 상세 (그 책에 달린 모든 공개 후기, 평균 별점, 장르 태그)
+- `/books/[id]` — 책 상세 (그 책에 달린 모든 공개 후기, 평균 잎점수, 장르 태그)
 - `/genres/[genre]` — 장르 태그로 책 검색
 
 ## 남은 작업 (2차 확장)
