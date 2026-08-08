@@ -6,6 +6,7 @@ export type BookSearchResult = {
   coverUrl: string | null;
   description: string | null;
   category: string | null;
+  purchaseUrl: string | null;
 };
 
 function stripTags(value: string) {
@@ -41,6 +42,7 @@ async function searchAladin(query: string): Promise<BookSearchResult[]> {
     cover: string;
     description: string;
     categoryName: string;
+    link: string;
   };
 
   return ((data.item ?? []) as AladinItem[]).map((item) => ({
@@ -51,6 +53,8 @@ async function searchAladin(query: string): Promise<BookSearchResult[]> {
     coverUrl: item.cover || null,
     description: item.description || null,
     category: item.categoryName || null,
+    // 알라딘 OpenAPI가 주는 링크는 TTBKey 기준 파트너스 추적이 포함되어 있음
+    purchaseUrl: item.link || null,
   }));
 }
 
@@ -80,6 +84,7 @@ async function searchNaver(query: string): Promise<BookSearchResult[]> {
     publisher: string;
     image: string;
     description: string;
+    link: string;
   };
 
   return ((data.items ?? []) as NaverItem[]).map((item) => ({
@@ -90,6 +95,7 @@ async function searchNaver(query: string): Promise<BookSearchResult[]> {
     coverUrl: item.image || null,
     description: item.description ? stripTags(item.description) : null,
     category: null,
+    purchaseUrl: item.link || null,
   }));
 }
 

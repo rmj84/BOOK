@@ -8,6 +8,7 @@ import { deleteReview } from "@/lib/actions/reviews";
 import { toggleLike } from "@/lib/actions/likes";
 import { addComment, deleteComment } from "@/lib/actions/comments";
 import SubmitButton from "@/components/submit-button";
+import BuyButton from "@/components/buy-button";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -86,6 +87,9 @@ export default async function ReviewDetailPage({ params }: Params) {
           </Link>
           <p className="text-neutral-500">{review.book.author}</p>
           <StarRating rating={review.rating} />
+          <div className="mt-2">
+            <BuyButton url={review.book.purchaseUrl} />
+          </div>
         </div>
       </div>
 

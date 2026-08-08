@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import ReviewCard from "@/components/review-card";
 import StarRating from "@/components/star-rating";
 import GenreTags from "@/components/genre-tags";
+import BuyButton from "@/components/buy-button";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -63,6 +64,8 @@ export default async function BookDetailPage({ params }: Params) {
       </div>
 
       <GenreTags category={book.category} />
+
+      <BuyButton url={book.purchaseUrl} />
 
       {book.description && (
         <p className="text-sm text-neutral-600 whitespace-pre-wrap">

@@ -23,6 +23,7 @@ type BookInput = {
   coverUrl: string | null;
   description: string | null;
   category: string | null;
+  purchaseUrl: string | null;
 };
 
 async function resolveBook(book: BookInput) {
@@ -49,6 +50,7 @@ export async function createReview(formData: FormData) {
     coverUrl: (formData.get("coverUrl") as string) || null,
     description: (formData.get("description") as string) || null,
     category: (formData.get("category") as string) || null,
+    purchaseUrl: (formData.get("purchaseUrl") as string) || null,
   };
 
   if (!book.title) throw new Error("책 제목은 필수입니다.");
