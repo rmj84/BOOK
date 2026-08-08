@@ -37,5 +37,6 @@ export async function toggleFollow(targetUserId: string) {
   }
 
   revalidatePath(`/u/${targetUserId}`);
+  revalidatePath("/");
   revalidatePath("/shelf");
 }

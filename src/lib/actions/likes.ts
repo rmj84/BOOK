@@ -23,5 +23,6 @@ export async function toggleLike(reviewId: string) {
   }
 
   revalidatePath(`/reviews/${reviewId}`);
+  revalidatePath("/");
   revalidatePath("/shelf");
 }
