@@ -15,7 +15,7 @@ export default function Header({ user }: { user: HeaderUser }) {
           북로그
         </Link>
         <nav className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm overflow-x-auto whitespace-nowrap">
-          <Link href="/feed">피드</Link>
+          <Link href="/shelf">책장</Link>
           <Link href="/reviews/new">후기 쓰기</Link>
           {user ? (
             <>

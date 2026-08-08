@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import ReviewCard from "@/components/review-card";
+import ShelfGrid from "@/components/shelf-grid";
 import BookShelf from "@/components/book-shelf";
 import { getBookShelves } from "@/lib/book-stats";
 
-export default async function FeedPage() {
+export default async function ShelfPage() {
   const session = await auth();
   const userId = session?.user?.id;
 
@@ -21,10 +21,10 @@ export default async function FeedPage() {
     ]);
   const followingIds = follows.map((f) => f.followingId);
 
-  const isFollowingFeed = userId != null && followingIds.length > 0;
+  const isFollowingShelf = userId != null && followingIds.length > 0;
 
-  const list = await prisma.review.findMany({
-    where: isFollowingFeed
+  const reviews = await prisma.review.findMany({
+    where: isFollowingShelf
       ? {
           OR: [
             { userId, isPublic: true },
@@ -34,11 +34,12 @@ export default async function FeedPage() {
         }
       : { isPublic: true },
     orderBy: { createdAt: "desc" },
-    take: 30,
-    include: {
-      book: true,
-      user: { select: { id: true, name: true, image: true } },
-      _count: { select: { likes: true, comments: true } },
+    take: 60,
+    select: {
+      id: true,
+      rating: true,
+      book: { select: { title: true, coverUrl: true } },
+      user: { select: { id: true, name: true } },
     },
   });
 
@@ -50,7 +51,7 @@ export default async function FeedPage() {
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-semibold">
-            {isFollowingFeed ? "팔로우 피드" : "최근 후기"}
+            {isFollowingShelf ? "내 책장" : "모두의 책장"}
           </h1>
           <Link href="/reviews/new" className="text-sm text-neutral-500">
             + 후기 쓰기
@@ -59,29 +60,11 @@ export default async function FeedPage() {
 
         {!userId && (
           <p className="text-sm text-neutral-500">
-            로그인하면 팔로우한 사람들의 후기만 모아볼 수 있어요.
+            로그인하면 팔로우한 사람들의 책장만 모아볼 수 있어요.
           </p>
         )}
 
-        {list.length === 0 && (
-          <p className="text-neutral-500 text-sm py-10 text-center">
-            아직 후기가 없어요.
-          </p>
-        )}
-
-        {list.map((review) => (
-          <ReviewCard
-            key={review.id}
-            id={review.id}
-            rating={review.rating}
-            content={review.content}
-            createdAt={review.createdAt}
-            book={review.book}
-            user={review.user}
-            likeCount={review._count.likes}
-            commentCount={review._count.comments}
-          />
-        ))}
+        <ShelfGrid reviews={reviews} />
       </div>
     </div>
   );

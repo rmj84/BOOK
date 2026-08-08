@@ -73,7 +73,7 @@ export async function createReview(formData: FormData) {
     },
   });
 
-  revalidatePath("/feed");
+  revalidatePath("/shelf");
   revalidatePath(`/u/${userId}`);
   redirect(`/reviews/${review.id}`);
 }
@@ -100,7 +100,7 @@ export async function updateReview(reviewId: string, formData: FormData) {
   });
 
   revalidatePath(`/reviews/${reviewId}`);
-  revalidatePath("/feed");
+  revalidatePath("/shelf");
   redirect(`/reviews/${reviewId}`);
 }
 
@@ -114,7 +114,7 @@ export async function deleteReview(reviewId: string) {
 
   await prisma.review.delete({ where: { id: reviewId } });
 
-  revalidatePath("/feed");
+  revalidatePath("/shelf");
   revalidatePath(`/u/${userId}`);
   redirect(`/u/${userId}`);
 }

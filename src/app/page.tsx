@@ -3,7 +3,7 @@ import { auth, signIn } from "@/lib/auth";
 
 export default async function Home() {
   const session = await auth();
-  if (session?.user) redirect("/feed");
+  if (session?.user) redirect("/shelf");
 
   return (
     <div className="flex flex-col items-center gap-6 py-24 text-center">
@@ -15,7 +15,7 @@ export default async function Home() {
       <form
         action={async () => {
           "use server";
-          await signIn("google", { redirectTo: "/feed" });
+          await signIn("google", { redirectTo: "/shelf" });
         }}
       >
         <button
