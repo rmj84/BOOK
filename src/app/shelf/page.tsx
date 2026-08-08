@@ -9,16 +9,18 @@ export default async function ShelfPage() {
   const session = await auth();
   const userId = session?.user?.id;
 
-  const [follows, { trending: trendingBooks, recommended: recommendedBooks }] =
-    await Promise.all([
-      userId
-        ? prisma.follow.findMany({
-            where: { followerId: userId },
-            select: { followingId: true },
-          })
-        : Promise.resolve([]),
-      getBookShelves(),
-    ]);
+  const [
+    follows,
+    { trending: trendingBooks, recommended: recommendedBooks, personalized },
+  ] = await Promise.all([
+    userId
+      ? prisma.follow.findMany({
+          where: { followerId: userId },
+          select: { followingId: true },
+        })
+      : Promise.resolve([]),
+    getBookShelves(userId),
+  ]);
   const followingIds = follows.map((f) => f.followingId);
 
   const isFollowingShelf = userId != null && followingIds.length > 0;
@@ -45,6 +47,9 @@ export default async function ShelfPage() {
 
   return (
     <div className="flex flex-col gap-8">
+      {personalized.length > 0 && (
+        <BookShelf title="🎯 취향 저격 추천" books={personalized} />
+      )}
       <BookShelf title="🔥 최근 인기 도서" books={trendingBooks} />
       <BookShelf title="⭐ 평점 높은 추천 도서" books={recommendedBooks} />
 
