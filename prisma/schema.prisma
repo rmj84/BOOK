@@ -6,8 +6,11 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  // Pooled (PgBouncer) connection — used by Prisma Client at runtime.
+  url       = env("DATABASE_URL")
+  // Direct (unpooled) connection — used by Prisma Migrate only.
+  directUrl = env("DIRECT_URL")
 }
 
 // --- Auth.js (NextAuth) required models -----------------------------------

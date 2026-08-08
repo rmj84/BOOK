@@ -23,7 +23,8 @@ npm run dev
 
 | 변수 | 설명 |
 |---|---|
-| `DATABASE_URL` | Neon 등 호스팅 Postgres의 connection string |
+| `DATABASE_URL` | Neon 등 호스팅 Postgres의 **풀링(pooled)** connection string. 서버리스(Vercel)에서 직접 연결을 쓰면 동시 접속이 몰릴 때 연결이 고갈되어 쓰기 작업이 실패할 수 있음 |
+| `DIRECT_URL` | 같은 DB의 **직접(unpooled)** connection string. `prisma migrate`가 사용 |
 | `AUTH_SECRET` | `openssl rand -base64 32`로 생성 |
 | `AUTH_GOOGLE_ID` / `AUTH_GOOGLE_SECRET` | [Google Cloud Console](https://console.cloud.google.com/apis/credentials)에서 OAuth 클라이언트 ID 발급 (발급 완료) |
 | `ALADIN_TTB_KEY` | 알라딘 OpenAPI TTBKey (발급 완료) |
@@ -47,10 +48,9 @@ npm run dev
 - `/reviews/[id]` — 후기 상세 (OG 메타태그로 SNS 공유 미리보기 지원)
 - `/reviews/[id]/edit` — 후기 수정 (작성자만)
 - `/u/[id]` — 프로필 (팔로우/언팔로우, 작성한 후기 목록)
+- `/books/[id]` — 책 상세 (그 책에 달린 모든 공개 후기, 평균 별점)
 
 ## 남은 작업 (2차 확장)
 
-- 좋아요 / 댓글
-- 책 상세 페이지 (책별 후기 모아보기)
 - 알림
-- 배포 (Vercel)
+- 개인화 추천 (지금은 평점/후기 수 기반 단순 랭킹)
