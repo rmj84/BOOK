@@ -1,51 +1,43 @@
 import type { Book } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 
-async function attachBooks<T extends { bookId: string }>(grouped: T[]) {
-  const books = await prisma.book.findMany({
-    where: { id: { in: grouped.map((g) => g.bookId) } },
-  });
-  const byId = new Map(books.map((b) => [b.id, b]));
+type BookWithStats = Book & { reviewCount: number; avgRating: number };
 
-  return grouped
-    .map((g) => ({ ...g, book: byId.get(g.bookId) }))
-    .filter(
-      (g): g is T & { book: Book } => g.book !== undefined
-    );
-}
-
-export async function getTrendingBooks(limit = 8) {
-  const grouped = await prisma.review.groupBy({
-    by: ["bookId"],
+async function computeBookStats(): Promise<BookWithStats[]> {
+  const reviews = await prisma.review.findMany({
     where: { isPublic: true },
-    _count: { bookId: true },
-    orderBy: { _count: { bookId: "desc" } },
-    take: limit,
+    select: { bookId: true, rating: true, book: true },
   });
-  if (grouped.length === 0) return [];
 
-  const withBooks = await attachBooks(grouped);
-  return withBooks.map((g) => ({
-    ...g.book,
-    reviewCount: g._count.bookId,
+  const byBook = new Map<string, { book: Book; count: number; sum: number }>();
+  for (const r of reviews) {
+    const entry = byBook.get(r.bookId);
+    if (entry) {
+      entry.count += 1;
+      entry.sum += r.rating;
+    } else {
+      byBook.set(r.bookId, { book: r.book, count: 1, sum: r.rating });
+    }
+  }
+
+  return Array.from(byBook.values()).map(({ book, count, sum }) => ({
+    ...book,
+    reviewCount: count,
+    avgRating: sum / count,
   }));
 }
 
-export async function getRecommendedBooks(limit = 8) {
-  const grouped = await prisma.review.groupBy({
-    by: ["bookId"],
-    where: { isPublic: true },
-    _avg: { rating: true },
-    _count: { bookId: true },
-    orderBy: [{ _avg: { rating: "desc" } }, { _count: { bookId: "desc" } }],
-    take: limit,
-  });
-  if (grouped.length === 0) return [];
+// 후기가 많은 순(트렌딩), 평점이 높은 순(추천)을 단일 쿼리로 함께 계산한다.
+export async function getBookShelves(limit = 8) {
+  const stats = await computeBookStats();
 
-  const withBooks = await attachBooks(grouped);
-  return withBooks.map((g) => ({
-    ...g.book,
-    avgRating: g._avg.rating ?? 0,
-    reviewCount: g._count.bookId,
-  }));
+  const trending = [...stats]
+    .sort((a, b) => b.reviewCount - a.reviewCount)
+    .slice(0, limit);
+
+  const recommended = [...stats]
+    .sort((a, b) => b.avgRating - a.avgRating || b.reviewCount - a.reviewCount)
+    .slice(0, limit);
+
+  return { trending, recommended };
 }

@@ -1,9 +1,15 @@
+import { cache } from "react";
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+const {
+  handlers,
+  auth: uncachedAuth,
+  signIn,
+  signOut,
+} = NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [Google],
   session: { strategy: "database" },
@@ -19,3 +25,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
   },
 });
+
+// "database" 세션 전략은 auth()를 호출할 때마다 DB 조회가 발생한다.
+// 레이아웃과 각 페이지가 매 요청마다 auth()를 각각 호출하므로,
+// React의 요청 단위 캐시로 감싸 같은 요청 안에서는 한 번만 조회하게 한다.
+const auth = cache(uncachedAuth);
+
+export { handlers, auth, signIn, signOut };

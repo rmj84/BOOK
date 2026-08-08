@@ -3,22 +3,22 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import ReviewCard from "@/components/review-card";
 import BookShelf from "@/components/book-shelf";
-import { getTrendingBooks, getRecommendedBooks } from "@/lib/book-stats";
+import { getBookShelves } from "@/lib/book-stats";
 
 export default async function FeedPage() {
   const session = await auth();
   const userId = session?.user?.id;
 
-  const [follows, trendingBooks, recommendedBooks] = await Promise.all([
-    userId
-      ? prisma.follow.findMany({
-          where: { followerId: userId },
-          select: { followingId: true },
-        })
-      : Promise.resolve([]),
-    getTrendingBooks(),
-    getRecommendedBooks(),
-  ]);
+  const [follows, { trending: trendingBooks, recommended: recommendedBooks }] =
+    await Promise.all([
+      userId
+        ? prisma.follow.findMany({
+            where: { followerId: userId },
+            select: { followingId: true },
+          })
+        : Promise.resolve([]),
+      getBookShelves(),
+    ]);
   const followingIds = follows.map((f) => f.followingId);
 
   const isFollowingFeed = userId != null && followingIds.length > 0;
