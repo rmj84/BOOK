@@ -106,6 +106,7 @@ export default function NewReviewForm() {
     publisher: null,
     coverUrl: null,
     description: null,
+    category: null,
   };
 
   return (
@@ -138,6 +139,7 @@ export default function NewReviewForm() {
           <input type="hidden" name="publisher" value="" />
           <input type="hidden" name="coverUrl" value="" />
           <input type="hidden" name="description" value="" />
+          <input type="hidden" name="category" value="" />
         </div>
       ) : (
         <div className="flex gap-3 rounded border border-neutral-200 bg-white p-3">
@@ -165,6 +167,7 @@ export default function NewReviewForm() {
             name="description"
             value={book.description ?? ""}
           />
+          <input type="hidden" name="category" value={book.category ?? ""} />
         </div>
       )}
 

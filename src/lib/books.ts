@@ -5,6 +5,7 @@ export type BookSearchResult = {
   publisher: string | null;
   coverUrl: string | null;
   description: string | null;
+  category: string | null;
 };
 
 function stripTags(value: string) {
@@ -37,6 +38,7 @@ async function searchAladin(query: string): Promise<BookSearchResult[]> {
     publisher: string;
     cover: string;
     description: string;
+    categoryName: string;
   };
 
   return ((data.item ?? []) as AladinItem[]).map((item) => ({
@@ -46,6 +48,7 @@ async function searchAladin(query: string): Promise<BookSearchResult[]> {
     publisher: item.publisher || null,
     coverUrl: item.cover || null,
     description: item.description || null,
+    category: item.categoryName || null,
   }));
 }
 
@@ -84,6 +87,7 @@ async function searchNaver(query: string): Promise<BookSearchResult[]> {
     publisher: item.publisher || null,
     coverUrl: item.image || null,
     description: item.description ? stripTags(item.description) : null,
+    category: null,
   }));
 }
 

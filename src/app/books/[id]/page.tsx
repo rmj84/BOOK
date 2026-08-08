@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import ReviewCard from "@/components/review-card";
 import StarRating from "@/components/star-rating";
+import GenreTags from "@/components/genre-tags";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -60,6 +61,8 @@ export default async function BookDetailPage({ params }: Params) {
           )}
         </div>
       </div>
+
+      <GenreTags category={book.category} />
 
       {book.description && (
         <p className="text-sm text-neutral-600 whitespace-pre-wrap">

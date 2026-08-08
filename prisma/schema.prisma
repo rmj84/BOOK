@@ -81,6 +81,8 @@ model Book {
   publisher   String?
   coverUrl    String?
   description String?
+  // e.g. Aladin categoryName: "국내도서>소설/시/희곡>한국소설". Null when unavailable.
+  category    String?
   createdAt   DateTime @default(now())
 
   reviews Review[]
