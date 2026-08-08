@@ -185,6 +185,18 @@ export default function NewReviewForm() {
 
       <div>
         <label className="block text-sm font-medium mb-1">후기</label>
+
+        <div className="mb-2 rounded border border-leaf/20 bg-leaf-light/60 px-3 py-2 text-xs text-ink/70">
+          <p className="mb-1 font-medium text-ink/80">🍃 작성 팁</p>
+          <ul className="list-disc pl-4 space-y-0.5">
+            <li>가장 기억에 남는 장면이나 문장을 적어보세요</li>
+            <li>이 책을 누구에게 추천하고 싶은지 써보면 좋아요</li>
+            <li>읽기 전과 후, 생각이 어떻게 바뀌었는지도 좋은 소재예요</li>
+            <li>완벽한 문장이 아니어도 괜찮아요, 솔직한 감상이 제일이에요</li>
+            <li>줄거리를 자세히 밝히고 싶다면 비공개로 남겨보세요</li>
+          </ul>
+        </div>
+
         <textarea
           name="content"
           required
