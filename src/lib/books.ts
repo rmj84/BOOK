@@ -25,6 +25,8 @@ async function searchAladin(query: string): Promise<BookSearchResult[]> {
   url.searchParams.set("SearchTarget", "Book");
   url.searchParams.set("output", "js");
   url.searchParams.set("Version", "20131101");
+  // 기본값은 저해상도 썸네일이라 화면에 크게 쓰기엔 화질이 떨어짐 — 큰 사이즈로 요청
+  url.searchParams.set("Cover", "Big");
 
   const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) return [];
