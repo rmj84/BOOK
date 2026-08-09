@@ -21,7 +21,7 @@ export default async function Home() {
       recommended={recommended}
       trending={trending}
       shelves={shelves}
-      isLoggedIn={!!userId}
+      user={session?.user ?? null}
     />
   );
 }

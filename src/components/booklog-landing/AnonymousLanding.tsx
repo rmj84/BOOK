@@ -1,5 +1,6 @@
 import type { FeaturedShelf } from "@/lib/book-stats";
 import { BG_ANGLE, FONT_BODY, PALETTE } from "./theme";
+import { LandingHeader, type LandingUser } from "./LandingHeader";
 import { Hero } from "./Hero";
 import { Stats, type LandingStats } from "./Stats";
 import { RecommendedSection, type LandingBook } from "./RecommendedSection";
@@ -15,15 +16,17 @@ export function AnonymousLanding({
   recommended,
   trending,
   shelves,
-  isLoggedIn = false,
+  user = null,
 }: {
   topBook: { title: string; author: string | null; rating: number } | null;
   stats: LandingStats;
   recommended: LandingBook[];
   trending: LandingBook[];
   shelves: FeaturedShelf[];
-  isLoggedIn?: boolean;
+  user?: LandingUser;
 }) {
+  const isLoggedIn = !!user;
+
   return (
     <div
       style={{
@@ -34,6 +37,7 @@ export function AnonymousLanding({
         marginRight: "-50vw",
         marginTop: "-1.5rem",
         width: "100vw",
+        minHeight: "100vh",
         overflow: "hidden",
         background: `linear-gradient(${BG_ANGLE}deg,${PALETTE.a} 0%,${PALETTE.b} 30%,${PALETTE.c} 62%,${PALETTE.d} 100%)`,
         fontFamily: FONT_BODY,
@@ -67,6 +71,7 @@ export function AnonymousLanding({
       />
 
       <div style={{ position: "relative", maxWidth: 1200, margin: "0 auto", padding: "0 40px" }}>
+        <LandingHeader user={user} />
         <Hero topBook={topBook} isLoggedIn={isLoggedIn} />
         <Stats stats={stats} />
         <RecommendedSection books={recommended} />
