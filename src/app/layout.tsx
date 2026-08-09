@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Nanum_Pen_Script, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { auth } from "@/lib/auth";
-import Header from "@/components/header";
 
 // Google Fonts는 나눔손글씨 펜 계열을 별도 "korean" 서브셋으로 나누지 않고
 // "latin" 하나로만 제공하는데, 이 파일 자체에 한글 글리프가 포함되어 있다.
@@ -22,9 +20,7 @@ export const metadata: Metadata = {
   description: "읽은 책의 후기를 기록하고 공유하는 서비스",
 };
 
-export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const session = await auth();
-
+export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="ko"
@@ -39,10 +35,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         />
       </head>
       <body className="min-h-full flex flex-col bg-paper text-ink">
-        <Header user={session?.user ?? null} />
-        <main className="flex-1 w-full max-w-2xl mx-auto px-4 py-6">
-          {children}
-        </main>
+        {children}
       </body>
     </html>
   );
