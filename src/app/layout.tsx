@@ -30,6 +30,14 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       lang="ko"
       className={`${pen.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        {/* 랜딩(2C) 전용 폰트. next/font는 이 폰트들의 한글 서브셋을 몰라 직접 링크로 로드 */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Gasoek+One&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Jua&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-paper text-ink">
         <Header user={session?.user ?? null} />
         <main className="flex-1 w-full max-w-2xl mx-auto px-4 py-6">

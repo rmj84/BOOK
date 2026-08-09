@@ -90,3 +90,57 @@ export async function getBookShelves(userId?: string, limit = 8) {
 
   return { trending, recommended, personalized };
 }
+
+export async function getLandingStats() {
+  const [reviewAgg, readerCount] = await Promise.all([
+    prisma.review.aggregate({
+      where: { isPublic: true },
+      _count: { _all: true },
+      _avg: { rating: true },
+    }),
+    prisma.user.count({ where: { reviews: { some: { isPublic: true } } } }),
+  ]);
+
+  return {
+    reviewCount: reviewAgg._count._all,
+    avgRating: reviewAgg._avg.rating ?? 0,
+    readerCount,
+  };
+}
+
+export type FeaturedShelf = {
+  user: { id: string; name: string | null; image: string | null };
+  reviewCount: number;
+  books: { id: string; title: string; coverUrl: string | null }[];
+};
+
+// 로그인 전 방문자에게 "모두의 책장"을 미리 보여주기 위한 요약. 후기를 가장
+// 많이 남긴 사람 순으로 몇 명만 뽑고, 각자 최근 후기 남긴 책 몇 권만 담는다.
+export async function getFeaturedShelves(
+  limit = 3,
+  booksPerShelf = 6
+): Promise<FeaturedShelf[]> {
+  const reviews = await prisma.review.findMany({
+    where: { isPublic: true },
+    orderBy: { createdAt: "desc" },
+    select: {
+      book: { select: { id: true, title: true, coverUrl: true } },
+      user: { select: { id: true, name: true, image: true } },
+    },
+  });
+
+  const byUser = new Map<string, FeaturedShelf>();
+  for (const r of reviews) {
+    const entry = byUser.get(r.user.id);
+    if (entry) {
+      entry.reviewCount += 1;
+      if (entry.books.length < booksPerShelf) entry.books.push(r.book);
+    } else {
+      byUser.set(r.user.id, { user: r.user, reviewCount: 1, books: [r.book] });
+    }
+  }
+
+  return Array.from(byUser.values())
+    .sort((a, b) => b.reviewCount - a.reviewCount)
+    .slice(0, limit);
+}
