@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { LeafIcon } from "./icons";
 import { LeafMeter } from "./LeafMeter";
-import { cardBase, cardShadow, FONT_BODY, FONT_DISPLAY, FONT_HEAD, INK, PALETTE } from "./theme";
+import { FONT_SERIF, PAPER, RULE_WEIGHT, coverPattern, monoLabel } from "./theme";
 
 export type LandingBook = {
   id: string;
@@ -8,83 +9,72 @@ export type LandingBook = {
   author: string | null;
   coverUrl: string | null;
   avgRating: number;
+  reviewCount?: number;
 };
 
 export function RecommendedSection({ books }: { books: LandingBook[] }) {
   if (books.length === 0) return null;
+  const shown = books.slice(0, 4);
 
   return (
-    <div style={{ padding: "72px 0 0" }}>
+    <>
       <div
         style={{
           display: "flex",
-          alignItems: "flex-end",
+          alignItems: "center",
           justifyContent: "space-between",
-          marginBottom: 22,
+          gap: 16,
+          padding: "22px 32px",
+          borderBottom: `${RULE_WEIGHT}px solid ${PAPER.rule}`,
         }}
       >
-        <div>
-          <h2 style={{ fontFamily: FONT_HEAD, fontSize: 28, color: INK, margin: 0, letterSpacing: "-0.01em" }}>
-            🍃 취향 저격 추천
-          </h2>
-          <p style={{ fontFamily: FONT_BODY, fontSize: 14, color: "#6E7D64", margin: "6px 0 0" }}>
-            평소 좋아한 장르를 바탕으로 골라봤어요
-          </p>
+        <div style={{ display: "flex", alignItems: "baseline", gap: 14 }}>
+          <span style={{ fontFamily: FONT_SERIF, fontSize: 22, fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 9 }}>
+            <LeafIcon />
+            취향 저격 추천
+          </span>
+          <span style={monoLabel}>평소 좋아한 장르를 바탕으로 골라봤어요</span>
         </div>
-        <Link
-          href="/shelf"
-          style={{ fontFamily: FONT_BODY, fontSize: 13, color: "#3E9B6B", fontWeight: 600, whiteSpace: "nowrap" }}
-        >
+        <Link href="/shelf" style={{ ...monoLabel, textTransform: "uppercase", whiteSpace: "nowrap" }}>
           더보기 →
         </Link>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 18 }}>
-        {books.slice(0, 4).map((book) => (
-          <Link
-            key={book.id}
-            href={`/books/${book.id}`}
-            style={{ ...cardBase, borderRadius: 22, padding: 14, ...cardShadow, display: "block" }}
-          >
+      <div style={{ display: "grid", gridTemplateColumns: `repeat(${shown.length + 1}, 1fr)`, borderBottom: `${RULE_WEIGHT}px solid ${PAPER.rule}` }}>
+        {shown.map((book, i) => (
+          <Link key={book.id} href={`/books/${book.id}`} style={{ padding: "26px 24px", borderRight: `1px solid ${PAPER.hair}`, display: "block" }}>
             {book.coverUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={book.coverUrl}
                 alt={book.title}
-                style={{
-                  width: "100%",
-                  aspectRatio: "3/4",
-                  borderRadius: 14,
-                  objectFit: "cover",
-                  marginBottom: 12,
-                  boxShadow: "0 8px 18px rgba(70,140,90,0.18)",
-                }}
+                style={{ width: "100%", aspectRatio: "2/3", objectFit: "cover", border: `1px solid ${PAPER.rule}`, marginBottom: 14 }}
               />
             ) : (
-              <div
-                style={{
-                  width: "100%",
-                  aspectRatio: "3/4",
-                  borderRadius: 14,
-                  background: PALETTE.cover,
-                  marginBottom: 12,
-                  boxShadow: "0 8px 18px rgba(70,140,90,0.18)",
-                }}
-              />
+              <div style={{ aspectRatio: "2/3", background: coverPattern(9), border: `1px solid ${PAPER.rule}`, marginBottom: 14 }} />
             )}
-            <div style={{ marginBottom: 7 }}>
-              <LeafMeter rating={book.avgRating} size={13} gap={2} />
-            </div>
-            <div style={{ fontFamily: FONT_DISPLAY, fontSize: 16, color: INK, lineHeight: 1.3 }}>
+            <div style={{ ...monoLabel, letterSpacing: "0.1em", marginBottom: 7 }}>0{i + 1} · 추천</div>
+            <div style={{ fontFamily: FONT_SERIF, fontSize: 19, fontWeight: 700, lineHeight: 1.3, wordBreak: "keep-all", color: PAPER.rule }}>
               {book.title}
             </div>
             {book.author && (
-              <div style={{ fontFamily: FONT_BODY, fontSize: 12.5, color: "#6E7D64", marginTop: 3 }}>
+              <div style={{ fontFamily: "'IBM Plex Sans KR',sans-serif", fontSize: 12.5, color: "#57534A", marginTop: 4 }}>
                 {book.author}
               </div>
             )}
+            <div style={{ marginTop: 10 }}>
+              <LeafMeter rating={book.avgRating} size={13} gap={3} />
+            </div>
           </Link>
         ))}
+        <div style={{ padding: "26px 24px", background: PAPER.rule, color: PAPER.sheet, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+          <div style={{ fontFamily: FONT_SERIF, fontSize: 30, lineHeight: 1.35, fontWeight: 400, fontStyle: "italic", marginBottom: 18 }}>
+            한 줄이면 충분해요
+          </div>
+          <Link href="/reviews/new" style={{ ...monoLabel, letterSpacing: "0.1em", color: "#A8A296" }}>
+            + 후기 쓰기
+          </Link>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

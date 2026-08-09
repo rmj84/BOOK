@@ -1,60 +1,68 @@
 import type { CSSProperties } from "react";
 
-export const LEAF = "#3E9B6B";
-export const INK = "#1F2A1C";
-
-export const PALETTE = {
-  a: "#F6FBEE",
-  b: "#E4F3D4",
-  c: "#CFEBD3",
-  d: "#BFE3D8",
-  grad: "linear-gradient(96deg,#7BB33A,#3E9B6B 52%,#2E8C82)",
-  cover: "linear-gradient(150deg,#A9D66E,#6FC79B)",
+// "1a 에디토리얼" 신문 그리드 디자인의 토큰.
+// Booklog Landing 1A.dc.html의 기본 트윅 값을 그대로 옮김:
+// paper: 뉴스프린트, accent: 먹색 (기본), ruleWeight: 1, sheetShadow: 10,
+// italicSecondLine: true, coverStyle: hatch.
+export const PAPER = {
+  bg: "#EDEAE4",
+  sheet: "#FBFAF7",
+  rule: "#1A1815",
+  hair: "#C9C4B8",
 };
 
-export const RADIUS = 22;
-export const BG_ANGLE = 145;
-export const GLASS_SOFTNESS = 0.62;
+export const ACCENT = "#1A1815";
+export const RULE_WEIGHT = 1;
+export const SHEET_SHADOW = 10;
 
-export const FONT_BODY = "'IBM Plex Sans KR', sans-serif";
-export const FONT_DISPLAY = "'Jua', 'IBM Plex Sans KR', sans-serif";
-export const FONT_HEAD = "'Gasoek One', 'Jua', sans-serif";
+export const FONT_SERIF = "'Bodoni Moda','Nanum Myeongjo',serif";
+export const FONT_SANS = "'IBM Plex Sans KR',sans-serif";
+export const FONT_MONO = "'DM Mono','IBM Plex Sans KR',monospace";
 
-export const glassBg = `rgba(255,255,255,${GLASS_SOFTNESS})`;
-
-export const cardBase: CSSProperties = {
-  background: glassBg,
-  backdropFilter: "blur(16px)",
-  WebkitBackdropFilter: "blur(16px)",
-  border: "1px solid rgba(255,255,255,0.9)",
+export const monoLabel: CSSProperties = {
+  fontFamily: FONT_MONO,
+  fontSize: 11,
+  letterSpacing: "0.08em",
+  color: "#57534A",
 };
 
-export const cardShadow: CSSProperties = {
-  boxShadow: "0 14px 34px rgba(70,140,90,0.14)",
-};
-
-export const glassPillStyle: CSSProperties = {
-  background: glassBg,
-  backdropFilter: "blur(10px)",
-  WebkitBackdropFilter: "blur(10px)",
-  border: "1px solid rgba(255,255,255,0.85)",
-  borderRadius: 999,
-  padding: "9px 18px",
-  fontFamily: FONT_BODY,
-  fontSize: 12.5,
+export const ctaButtonStyle: CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  gap: 8,
+  background: ACCENT,
+  color: PAPER.sheet,
+  border: "none",
+  padding: "15px 26px",
+  fontFamily: FONT_SANS,
+  fontSize: 14,
   fontWeight: 600,
-  color: "#3B4A34",
+  cursor: "pointer",
+  letterSpacing: "0.01em",
+  whiteSpace: "nowrap",
 };
 
-export const darkPillStyle: CSSProperties = {
-  background: INK,
-  color: "#F4FAEE",
-  borderRadius: 999,
-  padding: "10px 20px",
-  fontFamily: FONT_BODY,
-  fontSize: 12.5,
+export const pillButtonStyle = (active: boolean): CSSProperties => ({
+  background: active ? PAPER.rule : "transparent",
+  color: active ? PAPER.sheet : PAPER.rule,
+  border: `1px solid ${PAPER.rule}`,
+  padding: "8px 18px",
+  fontFamily: FONT_SANS,
+  fontSize: 12,
   fontWeight: 600,
-};
+  cursor: "pointer",
+  whiteSpace: "nowrap",
+});
+
+/** Hatch-pattern placeholder cover, matching coverStyle: "hatch" in the prototype. */
+export function coverPattern(widthPx: number): string {
+  return `repeating-linear-gradient(135deg, ${PAPER.bg}, ${PAPER.bg} ${widthPx}px, ${PAPER.hair} ${widthPx}px, ${PAPER.hair} ${widthPx * 2}px)`;
+}
+
+/** Shelf-row book spine height, matching the prototype's pseudo-random height formula. */
+export function shelfBookHeight(rowIndex: number, bookIndex: number): number {
+  return 86 + ((rowIndex * 2 + bookIndex * 3) % 4) * 9;
+}
 
 export function leaves(rating: number) {
   return [0, 1, 2, 3, 4].map((i) => ({

@@ -27,10 +27,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${pen.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
-        {/* 랜딩(2C) 전용 폰트. next/font는 이 폰트들의 한글 서브셋을 몰라 직접 링크로 로드 */}
+        {/* 랜딩(1a 에디토리얼) 전용 폰트. next/font는 이 폰트들의 한글 서브셋을 몰라 직접 링크로 로드 */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Gasoek+One&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Jua&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,ital,wght@6..96,0,400;6..96,0,600;6..96,0,700;6..96,1,400&family=DM+Mono:wght@400;500&family=Nanum+Myeongjo:wght@400;700;800&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </head>

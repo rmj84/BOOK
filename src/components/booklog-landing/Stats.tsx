@@ -1,4 +1,4 @@
-import { cardBase, cardShadow, FONT_BODY, FONT_HEAD, INK } from "./theme";
+import { FONT_SERIF, PAPER, RULE_WEIGHT, monoLabel } from "./theme";
 
 export type LandingStats = {
   reviewCount: number;
@@ -14,23 +14,13 @@ export function Stats({ stats }: { stats: LandingStats }) {
   ];
 
   return (
-    <div
-      style={{
-        ...cardBase,
-        borderRadius: 22,
-        display: "grid",
-        gridTemplateColumns: "repeat(3,1fr)",
-        ...cardShadow,
-      }}
-    >
-      {items.map((s) => (
-        <div key={s.key} style={{ textAlign: "center", padding: "20px 12px" }}>
-          <div style={{ fontFamily: FONT_HEAD, fontSize: 32, color: INK, lineHeight: 1.1 }}>
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", borderBottom: `${RULE_WEIGHT}px solid ${PAPER.rule}` }}>
+      {items.map((s, i) => (
+        <div key={s.key} style={{ padding: "26px 32px", borderRight: i < items.length - 1 ? `1px solid ${PAPER.hair}` : "none" }}>
+          <div style={{ fontFamily: FONT_SERIF, fontSize: 34, fontWeight: 700, lineHeight: 1, letterSpacing: "-0.01em" }}>
             {s.value}
           </div>
-          <div style={{ fontFamily: FONT_BODY, fontSize: 12.5, color: "#6E7D64", marginTop: 6 }}>
-            {s.label}
-          </div>
+          <div style={{ ...monoLabel, letterSpacing: "0.1em", marginTop: 9 }}>{s.label}</div>
         </div>
       ))}
     </div>

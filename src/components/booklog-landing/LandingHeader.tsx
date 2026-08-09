@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { signIn, signOut } from "@/lib/auth";
-import { darkPillStyle, FONT_DISPLAY, glassPillStyle, INK } from "./theme";
+import { ACCENT, FONT_MONO, FONT_SERIF, PAPER, RULE_WEIGHT, monoLabel } from "./theme";
 
 export type LandingUser = {
   id: string;
@@ -8,48 +8,62 @@ export type LandingUser = {
   image?: string | null;
 } | null;
 
+const navLinkStyle = { cursor: "pointer", color: PAPER.rule };
+const navLinkActiveStyle = {
+  cursor: "pointer",
+  fontWeight: 500,
+  color: ACCENT,
+  borderBottom: `1px solid ${ACCENT}`,
+  paddingBottom: 2,
+};
+
 export function LandingHeader({ user = null }: { user?: LandingUser }) {
   return (
     <div
       style={{
-        display: "flex",
+        display: "grid",
+        gridTemplateColumns: "1fr auto 1fr",
         alignItems: "center",
-        justifyContent: "space-between",
-        padding: "22px 0",
+        padding: "18px 32px",
+        borderBottom: `${RULE_WEIGHT}px solid ${PAPER.rule}`,
       }}
     >
+      <Link
+        href="/"
+        style={{
+          fontFamily: FONT_SERIF,
+          fontSize: 20,
+          fontWeight: 700,
+          letterSpacing: "0.03em",
+          color: PAPER.rule,
+        }}
+      >
+        BOOKLOG
+      </Link>
+      <div style={{ ...monoLabel, textAlign: "center" }}>제 1 호 · 독서 기록</div>
       <div
         style={{
           display: "flex",
+          gap: 20,
+          justifyContent: "flex-end",
           alignItems: "center",
-          gap: 9,
-          fontFamily: FONT_DISPLAY,
-          fontSize: 23,
-          color: INK,
+          fontFamily: FONT_MONO,
+          fontSize: 11,
+          letterSpacing: "0.08em",
+          textTransform: "uppercase",
+          whiteSpace: "nowrap",
         }}
       >
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="#3E9B6B">
-          <path d="M12 2.2C9.2 5.8 4.6 9.4 4.6 13.5c0 3.9 3.3 6.7 7.4 7.2 4.1-.5 7.4-3.3 7.4-7.2 0-4.1-4.6-7.7-7.4-11.3z" />
-          <path
-            d="M12 20.7v2.4"
-            fill="none"
-            stroke="#3E9B6B"
-            strokeWidth="1.7"
-            strokeLinecap="round"
-          />
-        </svg>
-        북로그
-      </div>
-      <div style={{ display: "flex", alignItems: "center", gap: 8, whiteSpace: "nowrap" }}>
-        <Link href="/shelf" style={glassPillStyle}>
-          모두의 책장
+        <span style={navLinkActiveStyle}>홈</span>
+        <Link href="/shelf" style={navLinkStyle}>
+          책장
         </Link>
-        <Link href="/reviews/new" style={glassPillStyle}>
-          후기 쓰기
+        <Link href="/reviews/new" style={navLinkStyle}>
+          후기
         </Link>
         {user ? (
           <>
-            <Link href={`/u/${user.id}`} style={glassPillStyle}>
+            <Link href={`/u/${user.id}`} style={navLinkStyle}>
               내 프로필
             </Link>
             <form
@@ -58,10 +72,7 @@ export function LandingHeader({ user = null }: { user?: LandingUser }) {
                 await signOut();
               }}
             >
-              <button
-                type="submit"
-                style={{ ...darkPillStyle, border: "none", cursor: "pointer" }}
-              >
+              <button type="submit" style={{ fontWeight: 500, cursor: "pointer", color: PAPER.rule, background: "none", border: "none", font: "inherit" }}>
                 로그아웃
               </button>
             </form>
@@ -73,10 +84,7 @@ export function LandingHeader({ user = null }: { user?: LandingUser }) {
               await signIn("google");
             }}
           >
-            <button
-              type="submit"
-              style={{ ...darkPillStyle, border: "none", cursor: "pointer" }}
-            >
+            <button type="submit" style={{ fontWeight: 500, cursor: "pointer", color: PAPER.rule, background: "none", border: "none", font: "inherit" }}>
               로그인
             </button>
           </form>
