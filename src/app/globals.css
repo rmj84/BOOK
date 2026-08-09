@@ -49,3 +49,22 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
 }
+
+/* 1a 에디토리얼 헤더는 데스크톱 폭 기준 고정 padding/gap의 인라인 스타일로 짜여있어
+   좁은 모바일 화면에서 nav 항목이 뷰포트 밖으로 밀려나 탭이 안 되는 문제가 있었다.
+   인라인 style이 항상 이기므로 !important로 좁은 화면에서만 덮어쓴다. */
+@media (max-width: 640px) {
+  .editorial-header {
+    grid-template-columns: auto 1fr !important;
+    padding: 14px 16px !important;
+  }
+  .editorial-header-center {
+    display: none !important;
+  }
+  .editorial-nav {
+    gap: 10px !important;
+    font-size: 9.5px !important;
+    flex-wrap: wrap !important;
+    row-gap: 6px !important;
+  }
+}

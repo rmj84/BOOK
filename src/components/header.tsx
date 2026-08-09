@@ -36,6 +36,7 @@ export default function Header({ user }: { user: HeaderUser }) {
 
   return (
     <div
+      className="editorial-header"
       style={{
         display: "grid",
         gridTemplateColumns: "1fr auto 1fr",
@@ -52,6 +53,7 @@ export default function Header({ user }: { user: HeaderUser }) {
         BOOKLOG
       </Link>
       <div
+        className="editorial-header-center"
         style={{
           fontFamily: FONT_MONO,
           fontSize: 11,
@@ -63,6 +65,7 @@ export default function Header({ user }: { user: HeaderUser }) {
         제 1 호 · 독서 기록
       </div>
       <nav
+        className="editorial-nav"
         style={{
           display: "flex",
           gap: 20,

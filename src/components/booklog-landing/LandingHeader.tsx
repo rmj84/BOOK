@@ -20,6 +20,7 @@ const navLinkActiveStyle = {
 export function LandingHeader({ user = null }: { user?: LandingUser }) {
   return (
     <div
+      className="editorial-header"
       style={{
         display: "grid",
         gridTemplateColumns: "1fr auto 1fr",
@@ -40,8 +41,9 @@ export function LandingHeader({ user = null }: { user?: LandingUser }) {
       >
         BOOKLOG
       </Link>
-      <div style={{ ...monoLabel, textAlign: "center" }}>제 1 호 · 독서 기록</div>
+      <div className="editorial-header-center" style={{ ...monoLabel, textAlign: "center" }}>제 1 호 · 독서 기록</div>
       <div
+        className="editorial-nav"
         style={{
           display: "flex",
           gap: 20,
