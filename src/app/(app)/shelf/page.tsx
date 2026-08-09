@@ -1,65 +1,78 @@
-import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import ShelfGrid from "@/components/shelf-grid";
-import { FONT_SERIF, PAPER, RULE_WEIGHT, ctaButtonStyle, monoLabel } from "@/components/booklog-landing/theme";
+import ShelfGrid, { type ShelfPerson } from "@/components/shelf-grid";
+
+type RawReview = {
+  id: string;
+  rating: number;
+  book: { id: string; title: string; coverUrl: string | null };
+  user: { id: string; name: string | null; image: string | null };
+};
+
+function groupByUser(reviews: RawReview[], booksPerShelf = 8): ShelfPerson[] {
+  const byUser = new Map<
+    string,
+    { user: RawReview["user"]; reviewCount: number; bookIds: Set<string>; books: ShelfPerson["books"] }
+  >();
+
+  for (const r of reviews) {
+    let entry = byUser.get(r.user.id);
+    if (!entry) {
+      entry = { user: r.user, reviewCount: 0, bookIds: new Set(), books: [] };
+      byUser.set(r.user.id, entry);
+    }
+    entry.reviewCount += 1;
+    if (!entry.bookIds.has(r.book.id)) {
+      entry.bookIds.add(r.book.id);
+      if (entry.books.length < booksPerShelf) entry.books.push(r.book);
+    }
+  }
+
+  return Array.from(byUser.values())
+    .map(({ user, reviewCount, bookIds, books }) => ({
+      user,
+      reviewCount,
+      bookCount: bookIds.size,
+      books,
+    }))
+    .sort((a, b) => b.reviewCount - a.reviewCount);
+}
 
 export default async function ShelfPage() {
   const session = await auth();
-  const userId = session?.user?.id;
+  const viewerId = session?.user?.id ?? null;
 
-  const follows = userId
-    ? await prisma.follow.findMany({
-        where: { followerId: userId },
-        select: { followingId: true },
-      })
-    : [];
-  const followingIds = follows.map((f) => f.followingId);
+  const select = {
+    id: true,
+    rating: true,
+    book: { select: { id: true, title: true, coverUrl: true } },
+    user: { select: { id: true, name: true, image: true } },
+  } as const;
 
-  const isFollowingShelf = userId != null && followingIds.length > 0;
-
-  const reviews = await prisma.review.findMany({
-    where: isFollowingShelf
-      ? {
-          OR: [
-            { userId, isPublic: true },
-            { userId: { in: followingIds }, isPublic: true },
-            { userId },
-          ],
-        }
-      : { isPublic: true },
-    orderBy: { createdAt: "desc" },
-    take: 60,
-    select: {
-      id: true,
-      rating: true,
-      book: { select: { title: true, coverUrl: true } },
-      user: { select: { id: true, name: true } },
-    },
-  });
+  const [publicReviews, myReviews, follows] = await Promise.all([
+    prisma.review.findMany({
+      where: { isPublic: true },
+      orderBy: { createdAt: "desc" },
+      select,
+    }),
+    viewerId
+      ? prisma.review.findMany({
+          where: { userId: viewerId },
+          orderBy: { createdAt: "desc" },
+          select,
+        })
+      : Promise.resolve([]),
+    viewerId
+      ? prisma.follow.findMany({ where: { followerId: viewerId }, select: { followingId: true } })
+      : Promise.resolve([]),
+  ]);
 
   return (
-    <div>
-      <div style={{ marginBottom: 24, paddingBottom: 20, borderBottom: `${RULE_WEIGHT}px solid ${PAPER.rule}` }}>
-        <div style={{ ...monoLabel, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 10 }}>
-          Shelves
-        </div>
-        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
-          <h1 style={{ fontFamily: FONT_SERIF, fontSize: 30, fontWeight: 700, margin: 0, letterSpacing: "-0.01em" }}>
-            {isFollowingShelf ? "내 책장" : "모두의 책장"}
-          </h1>
-          <Link href="/reviews/new" style={ctaButtonStyle}>
-            + 후기 쓰기
-          </Link>
-        </div>
-        {!userId && (
-          <p style={{ fontFamily: "'IBM Plex Sans KR',sans-serif", fontSize: 13.5, color: "#57534A", margin: "12px 0 0" }}>
-            로그인하면 팔로우한 사람들의 책장만 모아볼 수 있어요.
-          </p>
-        )}
-      </div>
-
-      <ShelfGrid reviews={reviews} />
-    </div>
+    <ShelfGrid
+      allShelves={groupByUser(publicReviews)}
+      myShelf={groupByUser(myReviews)}
+      followingIds={follows.map((f) => f.followingId)}
+      viewerId={viewerId}
+    />
   );
 }
