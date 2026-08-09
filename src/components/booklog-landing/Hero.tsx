@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { signIn } from "@/lib/auth";
 import { LeafMeter } from "./LeafMeter";
 import {
@@ -16,7 +17,13 @@ type TopBook = {
   rating: number;
 };
 
-export function Hero({ topBook }: { topBook: TopBook | null }) {
+export function Hero({
+  topBook,
+  isLoggedIn = false,
+}: {
+  topBook: TopBook | null;
+  isLoggedIn?: boolean;
+}) {
   return (
     <div
       style={{
@@ -88,14 +95,9 @@ export function Hero({ topBook }: { topBook: TopBook | null }) {
         </p>
 
         <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
-          <form
-            action={async () => {
-              "use server";
-              await signIn("google");
-            }}
-          >
-            <button
-              type="submit"
+          {isLoggedIn ? (
+            <Link
+              href="/reviews/new"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -122,16 +124,59 @@ export function Hero({ topBook }: { topBook: TopBook | null }) {
                   display: "inline-flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  fontSize: 11,
-                  fontWeight: 700,
-                  color: "#F4FAEE",
+                  fontSize: 12,
                 }}
               >
-                G
+                🍃
               </span>
-              Google로 시작하기
-            </button>
-          </form>
+              + 후기 쓰기
+            </Link>
+          ) : (
+            <form
+              action={async () => {
+                "use server";
+                await signIn("google");
+              }}
+            >
+              <button
+                type="submit"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 10,
+                  background: "rgba(255,255,255,0.75)",
+                  backdropFilter: "blur(14px)",
+                  border: "1.5px solid rgba(255,255,255,0.95)",
+                  borderRadius: 999,
+                  padding: "16px 28px",
+                  fontFamily: FONT_BODY,
+                  fontSize: 15,
+                  fontWeight: 700,
+                  color: INK,
+                  cursor: "pointer",
+                  boxShadow: "0 12px 30px rgba(70,140,90,0.2)",
+                }}
+              >
+                <span
+                  style={{
+                    width: 21,
+                    height: 21,
+                    borderRadius: "50%",
+                    background: INK,
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: 11,
+                    fontWeight: 700,
+                    color: "#F4FAEE",
+                  }}
+                >
+                  G
+                </span>
+                Google로 시작하기
+              </button>
+            </form>
+          )}
         </div>
       </div>
 

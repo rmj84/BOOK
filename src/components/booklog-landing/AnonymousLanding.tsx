@@ -15,12 +15,14 @@ export function AnonymousLanding({
   recommended,
   trending,
   shelves,
+  isLoggedIn = false,
 }: {
   topBook: { title: string; author: string | null; rating: number } | null;
   stats: LandingStats;
   recommended: LandingBook[];
   trending: LandingBook[];
   shelves: FeaturedShelf[];
+  isLoggedIn?: boolean;
 }) {
   return (
     <div
@@ -65,7 +67,7 @@ export function AnonymousLanding({
       />
 
       <div style={{ position: "relative", maxWidth: 1200, margin: "0 auto", padding: "0 40px" }}>
-        <Hero topBook={topBook} />
+        <Hero topBook={topBook} isLoggedIn={isLoggedIn} />
         <Stats stats={stats} />
         <RecommendedSection books={recommended} />
         <PopularSection books={trending} />
