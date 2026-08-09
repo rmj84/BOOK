@@ -46,11 +46,11 @@ export default function ShelfGrid({ reviews }: { reviews: ShelfReview[] }) {
                     className="w-full aspect-[2/3] object-cover rounded-t-[2px] rounded-b-[1px] shadow-[2px_4px_6px_rgba(0,0,0,0.25)]"
                   />
                 ) : (
-                  <div className="w-full aspect-[2/3] rounded-t-[2px] rounded-b-[1px] bg-leaf-light shadow-[2px_4px_6px_rgba(0,0,0,0.25)] flex items-center justify-center px-1 text-center text-[10px] text-ink/55">
+                  <div className="w-full aspect-[2/3] rounded-t-[2px] rounded-b-[1px] bg-leaf-light shadow-[2px_4px_6px_rgba(0,0,0,0.25)] flex items-center justify-center px-1 text-center text-[11px] text-ink/55">
                     {review.book.title}
                   </div>
                 )}
-                <span className="absolute bottom-1 right-1 rounded bg-leaf-dark/85 px-1.5 py-0.5 text-[10px] font-medium text-white">
+                <span className="absolute bottom-1 right-1 rounded bg-leaf-dark/85 px-1.5 py-0.5 text-[11px] font-medium text-white">
                   🍃 {review.rating}
                 </span>
               </Link>

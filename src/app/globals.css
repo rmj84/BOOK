@@ -39,6 +39,11 @@
   }
 }
 
+html {
+  /* 손글씨 폰트는 가독성을 위해 기본 크기를 조금 키움 */
+  font-size: 115%;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
