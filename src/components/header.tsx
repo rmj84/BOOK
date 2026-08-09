@@ -1,5 +1,9 @@
+"use client";
+
 import Link from "next/link";
-import { signIn, signOut } from "@/lib/auth";
+import { usePathname } from "next/navigation";
+import { signInWithGoogle, signOutAction } from "@/lib/actions/auth";
+import { FONT_MONO, FONT_SERIF, PAPER, RULE_WEIGHT, ACCENT } from "@/components/booklog-landing/theme";
 
 type HeaderUser = {
   id: string;
@@ -7,48 +11,95 @@ type HeaderUser = {
   image?: string | null;
 } | null;
 
+const navBaseStyle = { cursor: "pointer", color: PAPER.rule };
+const navActiveStyle = {
+  cursor: "pointer",
+  fontWeight: 500,
+  color: ACCENT,
+  borderBottom: `1px solid ${ACCENT}`,
+  paddingBottom: 2,
+};
+const authButtonStyle = {
+  fontWeight: 500,
+  cursor: "pointer",
+  color: PAPER.rule,
+  background: "none",
+  border: "none",
+  font: "inherit",
+  padding: 0,
+};
+
 export default function Header({ user }: { user: HeaderUser }) {
+  const pathname = usePathname();
+  const shelfActive = pathname.startsWith("/shelf") || pathname.startsWith("/books") || pathname.startsWith("/genres");
+  const reviewActive = pathname.startsWith("/reviews");
+
   return (
-    <header className="border-b border-leaf/20 bg-card">
-      <div className="max-w-2xl mx-auto px-3 sm:px-4 h-14 flex items-center justify-between gap-2">
-        <Link href="/" className="font-semibold text-lg shrink-0">
-          북로그
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "1fr auto 1fr",
+        alignItems: "center",
+        padding: "18px 32px",
+        borderBottom: `${RULE_WEIGHT}px solid ${PAPER.rule}`,
+        background: PAPER.sheet,
+      }}
+    >
+      <Link
+        href="/"
+        style={{ fontFamily: FONT_SERIF, fontSize: 20, fontWeight: 700, letterSpacing: "0.03em", color: PAPER.rule }}
+      >
+        BOOKLOG
+      </Link>
+      <div
+        style={{
+          fontFamily: FONT_MONO,
+          fontSize: 11,
+          letterSpacing: "0.08em",
+          color: "#57534A",
+          textAlign: "center",
+        }}
+      >
+        제 1 호 · 독서 기록
+      </div>
+      <nav
+        style={{
+          display: "flex",
+          gap: 20,
+          justifyContent: "flex-end",
+          alignItems: "center",
+          fontFamily: FONT_MONO,
+          fontSize: 11,
+          letterSpacing: "0.08em",
+          textTransform: "uppercase",
+          whiteSpace: "nowrap",
+        }}
+      >
+        <Link href="/shelf" style={shelfActive ? navActiveStyle : navBaseStyle}>
+          책장
         </Link>
-        <nav className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm overflow-x-auto whitespace-nowrap">
-          <Link href="/shelf">책장</Link>
-          <Link href="/reviews/new">후기 쓰기</Link>
-          {user ? (
-            <>
-              <Link href={`/u/${user.id}`}>내 프로필</Link>
-              <form
-                action={async () => {
-                  "use server";
-                  await signOut();
-                }}
-              >
-                <button type="submit" className="text-ink/55 shrink-0">
-                  로그아웃
-                </button>
-              </form>
-            </>
-          ) : (
-            <form
-              action={async () => {
-                "use server";
-                await signIn("google");
-              }}
-              className="shrink-0"
-            >
-              <button
-                type="submit"
-                className="rounded bg-leaf hover:bg-leaf-dark text-white px-3 py-1.5"
-              >
-                로그인
+        <Link href="/reviews/new" style={reviewActive ? navActiveStyle : navBaseStyle}>
+          후기 쓰기
+        </Link>
+        {user ? (
+          <>
+            <Link href={`/u/${user.id}`} style={navBaseStyle}>
+              내 프로필
+            </Link>
+            <form action={signOutAction}>
+              <button type="submit" style={authButtonStyle}>
+                로그아웃
               </button>
             </form>
-          )}
-        </nav>
-      </div>
-    </header>
+          </>
+        ) : (
+          <form action={signInWithGoogle}>
+            <button type="submit" style={authButtonStyle}>
+              로그인
+            </button>
+          </form>
+        )}
+      </nav>
+    </div>
   );
 }

@@ -4,6 +4,13 @@ import { prisma } from "@/lib/prisma";
 import ReviewCard from "@/components/review-card";
 import { toggleFollow } from "@/lib/actions/follow";
 import SubmitButton from "@/components/submit-button";
+import {
+  FONT_SERIF,
+  PAPER,
+  coverPattern,
+  monoLabel,
+  pillButtonStyle,
+} from "@/components/booklog-landing/theme";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -39,47 +46,38 @@ export default async function ProfilePage({ params }: Params) {
     ]);
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex items-center gap-4">
+    <div>
+      <div style={{ display: "flex", alignItems: "center", gap: 18, paddingBottom: 26, marginBottom: 26, borderBottom: `1px solid ${PAPER.hair}` }}>
         {profileUser.image ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={profileUser.image}
             alt={profileUser.name ?? ""}
-            className="w-16 h-16 rounded-full"
+            style={{ width: 64, height: 64, borderRadius: "50%", objectFit: "cover", border: `1px solid ${PAPER.rule}`, flexShrink: 0 }}
           />
         ) : (
-          <div className="w-16 h-16 rounded-full bg-leaf-light" />
+          <div style={{ width: 64, height: 64, borderRadius: "50%", background: coverPattern(7), border: `1px solid ${PAPER.rule}`, flexShrink: 0 }} />
         )}
-        <div className="flex-1">
-          <h1 className="text-xl font-semibold">
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <h1 style={{ fontFamily: FONT_SERIF, fontSize: 24, fontWeight: 700, margin: 0, color: PAPER.rule }}>
             {profileUser.name ?? "익명"}
           </h1>
-          <p className="text-sm text-ink/55">
+          <p style={{ ...monoLabel, marginTop: 6 }}>
             팔로워 {followerCount} · 팔로잉 {followingCount}
           </p>
         </div>
         {!isOwner && viewerId && (
           <form action={toggleFollow.bind(null, id)}>
-            <SubmitButton
-              pendingText="처리 중..."
-              className={
-                isFollowing
-                  ? "rounded border border-leaf/25 px-3 py-1.5 text-sm disabled:opacity-50"
-                  : "rounded bg-leaf hover:bg-leaf-dark text-white px-3 py-1.5 text-sm disabled:opacity-50"
-              }
-            >
+            <SubmitButton pendingText="처리 중..." style={pillButtonStyle(!!isFollowing)}>
               {isFollowing ? "팔로잉" : "팔로우"}
             </SubmitButton>
           </form>
         )}
       </div>
 
-      <div className="flex flex-col gap-4">
+      <div>
         {reviews.length === 0 && (
-          <p className="text-ink/55 text-sm py-10 text-center">
-            아직 작성한 후기가 없어요.
-          </p>
+          <p style={{ ...monoLabel, padding: "40px 0", textAlign: "center" }}>아직 작성한 후기가 없어요.</p>
         )}
         {reviews.map((review) => (
           <ReviewCard

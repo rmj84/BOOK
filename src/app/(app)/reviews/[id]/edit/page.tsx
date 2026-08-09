@@ -4,8 +4,23 @@ import { prisma } from "@/lib/prisma";
 import { updateReview } from "@/lib/actions/reviews";
 import LeafScoreInput from "@/components/leaf-score-input";
 import SubmitButton from "@/components/submit-button";
+import { FONT_SERIF, PAPER, ctaButtonStyle, monoLabel } from "@/components/booklog-landing/theme";
 
 type Params = { params: Promise<{ id: string }> };
+
+const textareaStyle = {
+  width: "100%",
+  border: `1px solid ${PAPER.rule}`,
+  background: PAPER.sheet,
+  padding: "14px 16px",
+  fontFamily: "'IBM Plex Sans KR',sans-serif",
+  fontSize: 14,
+  lineHeight: 1.8,
+  color: PAPER.rule,
+  outline: "none",
+  resize: "vertical" as const,
+  boxSizing: "border-box" as const,
+};
 
 export default async function EditReviewPage({ params }: Params) {
   const { id } = await params;
@@ -22,38 +37,28 @@ export default async function EditReviewPage({ params }: Params) {
   const updateWithId = updateReview.bind(null, id);
 
   return (
-    <form action={updateWithId} className="flex flex-col gap-4">
-      <h1 className="text-xl font-semibold">{review.book.title} 후기 수정</h1>
+    <form action={updateWithId}>
+      <div style={{ ...monoLabel, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 14 }}>Edit</div>
+      <h1 style={{ fontFamily: FONT_SERIF, fontSize: 26, fontWeight: 700, margin: "0 0 26px", color: PAPER.rule, wordBreak: "keep-all" }}>
+        {review.book.title} 후기 수정
+      </h1>
 
-      <div>
-        <label className="block text-sm font-medium mb-1">잎점수</label>
+      <div style={{ marginBottom: 26 }}>
+        <div style={{ ...monoLabel, letterSpacing: "0.12em", marginBottom: 10 }}>잎점수</div>
         <LeafScoreInput name="rating" defaultValue={review.rating} />
       </div>
 
-      <div>
-        <label className="block text-sm font-medium mb-1">후기</label>
-        <textarea
-          name="content"
-          required
-          rows={6}
-          defaultValue={review.content}
-          className="w-full rounded border border-leaf/25 px-3 py-2"
-        />
+      <div style={{ marginBottom: 22 }}>
+        <div style={{ ...monoLabel, letterSpacing: "0.12em", marginBottom: 10 }}>후기</div>
+        <textarea name="content" required rows={6} defaultValue={review.content} style={textareaStyle} />
       </div>
 
-      <label className="flex items-center gap-2 text-sm">
-        <input
-          type="checkbox"
-          name="isPublic"
-          defaultChecked={review.isPublic}
-        />
+      <label style={{ display: "flex", alignItems: "center", gap: 8, fontFamily: "'IBM Plex Sans KR',sans-serif", fontSize: 13.5, color: "#3A362F", marginBottom: 24 }}>
+        <input type="checkbox" name="isPublic" defaultChecked={review.isPublic} />
         다른 사람에게 공개하기
       </label>
 
-      <SubmitButton
-        pendingText="저장 중..."
-        className="rounded bg-leaf hover:bg-leaf-dark text-white px-4 py-2.5 font-medium disabled:opacity-50"
-      >
+      <SubmitButton pendingText="저장 중..." style={ctaButtonStyle}>
         저장
       </SubmitButton>
     </form>

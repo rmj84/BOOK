@@ -1,4 +1,6 @@
 import Link from "next/link";
+import LeafScore from "@/components/leaf-score";
+import { FONT_SERIF, PAPER, coverPattern, monoLabel } from "@/components/booklog-landing/theme";
 
 type ShelfReview = {
   id: string;
@@ -7,58 +9,51 @@ type ShelfReview = {
   user: { id: string; name: string | null };
 };
 
-const COLUMNS = 3;
-
 export default function ShelfGrid({ reviews }: { reviews: ShelfReview[] }) {
   if (reviews.length === 0) {
-    return (
-      <p className="text-ink/55 text-sm py-10 text-center">
-        아직 꽂힌 책이 없어요.
-      </p>
-    );
-  }
-
-  const rows: ShelfReview[][] = [];
-  for (let i = 0; i < reviews.length; i += COLUMNS) {
-    rows.push(reviews.slice(i, i + COLUMNS));
+    return <p style={{ ...monoLabel, padding: "40px 0", textAlign: "center" }}>아직 꽂힌 책이 없어요.</p>;
   }
 
   return (
-    <div className="rounded-lg border border-[#e2d5bf] bg-[#faf6ee] px-2 pt-1">
-      {rows.map((row, rowIndex) => (
-        <div key={rowIndex}>
-          <div className="grid grid-cols-3 items-end divide-x divide-[#e2d5bf] pt-3">
-            {row.map((review, i) => (
-              <Link
-                key={review.id}
-                href={`/reviews/${review.id}`}
-                title={`${review.book.title} · ${review.user.name ?? "익명"}`}
-                className="relative block px-2"
-                style={{
-                  transform: `rotate(${i % 2 === 0 ? -0.6 : 0.6}deg)`,
-                }}
-              >
-                {review.book.coverUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={review.book.coverUrl}
-                    alt={review.book.title}
-                    className="w-full aspect-[2/3] object-cover rounded-t-[2px] rounded-b-[1px] shadow-[2px_4px_6px_rgba(0,0,0,0.25)]"
-                  />
-                ) : (
-                  <div className="w-full aspect-[2/3] rounded-t-[2px] rounded-b-[1px] bg-leaf-light shadow-[2px_4px_6px_rgba(0,0,0,0.25)] flex items-center justify-center px-1 text-center text-[11px] text-ink/55">
-                    {review.book.title}
-                  </div>
-                )}
-                <span className="absolute bottom-1 right-1 rounded bg-leaf-dark/85 px-1.5 py-0.5 text-[11px] font-medium text-white">
-                  🍃 {review.rating}
-                </span>
-              </Link>
-            ))}
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(3,1fr)",
+        borderTop: `1px solid ${PAPER.hair}`,
+        borderLeft: `1px solid ${PAPER.hair}`,
+      }}
+    >
+      {reviews.map((review) => (
+        <Link
+          key={review.id}
+          href={`/reviews/${review.id}`}
+          title={`${review.book.title} · ${review.user.name ?? "익명"}`}
+          style={{
+            padding: "20px 18px",
+            borderRight: `1px solid ${PAPER.hair}`,
+            borderBottom: `1px solid ${PAPER.hair}`,
+            display: "block",
+            color: PAPER.rule,
+          }}
+        >
+          {review.book.coverUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={review.book.coverUrl}
+              alt={review.book.title}
+              style={{ width: "100%", aspectRatio: "2/3", objectFit: "cover", border: `1px solid ${PAPER.rule}`, marginBottom: 12 }}
+            />
+          ) : (
+            <div style={{ aspectRatio: "2/3", background: coverPattern(8), border: `1px solid ${PAPER.rule}`, marginBottom: 12 }} />
+          )}
+          <div style={{ marginBottom: 6 }}>
+            <LeafScore score={review.rating} className="text-xs" />
           </div>
-          {/* 원목 선반 널빤지 */}
-          <div className="mt-0 h-3 rounded-[1px] bg-gradient-to-b from-[#ddbd8f] to-[#b4875a] shadow-[0_3px_5px_rgba(0,0,0,0.25)]" />
-        </div>
+          <div style={{ fontFamily: FONT_SERIF, fontSize: 15, fontWeight: 700, lineHeight: 1.3, wordBreak: "keep-all" }}>
+            {review.book.title}
+          </div>
+          <div style={{ ...monoLabel, marginTop: 4 }}>{review.user.name ?? "익명"}</div>
+        </Link>
       ))}
     </div>
   );

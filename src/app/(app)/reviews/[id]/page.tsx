@@ -9,8 +9,38 @@ import { toggleLike } from "@/lib/actions/likes";
 import { addComment, deleteComment } from "@/lib/actions/comments";
 import SubmitButton from "@/components/submit-button";
 import BuyButton from "@/components/buy-button";
+import {
+  FONT_SERIF,
+  PAPER,
+  coverPattern,
+  monoLabel,
+  pillButtonStyle,
+} from "@/components/booklog-landing/theme";
 
 type Params = { params: Promise<{ id: string }> };
+
+const inputStyle = {
+  border: `1px solid ${PAPER.rule}`,
+  background: PAPER.sheet,
+  padding: "9px 12px",
+  fontFamily: "'IBM Plex Sans KR',sans-serif",
+  fontSize: 13.5,
+  color: PAPER.rule,
+  outline: "none",
+  boxSizing: "border-box" as const,
+};
+
+const dangerPillStyle = {
+  background: "transparent",
+  color: "#8C3B2E",
+  border: "1px solid #8C3B2E",
+  padding: "8px 16px",
+  fontFamily: "'IBM Plex Sans KR',sans-serif",
+  fontSize: 12,
+  fontWeight: 600,
+  cursor: "pointer",
+  whiteSpace: "nowrap" as const,
+};
 
 async function getReview(id: string) {
   return prisma.review.findUnique({
@@ -69,66 +99,70 @@ export default async function ReviewDetailPage({ params }: Params) {
   ]);
 
   return (
-    <article className="flex flex-col gap-4">
-      <div className="flex gap-4">
+    <article>
+      <div style={{ ...monoLabel, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 18 }}>Review</div>
+
+      <div style={{ display: "flex", gap: 18, paddingBottom: 24, marginBottom: 24, borderBottom: `1px solid ${PAPER.hair}` }}>
         {review.book.coverUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={review.book.coverUrl}
             alt={review.book.title}
-            className="w-24 h-36 object-cover rounded shrink-0"
+            style={{ width: 88, height: 128, objectFit: "cover", border: `1px solid ${PAPER.rule}`, flexShrink: 0 }}
           />
         ) : (
-          <div className="w-24 h-36 rounded bg-leaf-light shrink-0" />
+          <div style={{ width: 88, height: 128, background: coverPattern(9), border: `1px solid ${PAPER.rule}`, flexShrink: 0 }} />
         )}
-        <div>
-          <Link href={`/books/${review.book.id}`} className="hover:underline">
-            <h1 className="text-xl font-semibold">{review.book.title}</h1>
+        <div style={{ minWidth: 0 }}>
+          <Link href={`/books/${review.book.id}`}>
+            <h1 style={{ fontFamily: FONT_SERIF, fontSize: 24, fontWeight: 700, margin: 0, color: PAPER.rule, wordBreak: "keep-all" }}>
+              {review.book.title}
+            </h1>
           </Link>
-          <p className="text-ink/55">{review.book.author}</p>
-          <LeafScore score={review.rating} />
-          <div className="mt-2">
+          <p style={{ fontFamily: "'IBM Plex Sans KR',sans-serif", fontSize: 13, color: "#57534A", margin: "4px 0 10px" }}>
+            {review.book.author}
+          </p>
+          <LeafScore score={review.rating} className="text-sm" />
+          <div style={{ marginTop: 10 }}>
             <BuyButton url={review.book.purchaseUrl} />
           </div>
         </div>
       </div>
 
-      <p className="whitespace-pre-wrap text-ink">{review.content}</p>
+      <p
+        style={{
+          fontFamily: "'IBM Plex Sans KR',sans-serif",
+          fontSize: 15,
+          lineHeight: 1.85,
+          color: "#221F1B",
+          margin: "0 0 24px",
+          whiteSpace: "pre-wrap",
+        }}
+      >
+        {review.content}
+      </p>
 
-      <div className="flex items-center justify-between text-sm text-ink/55">
-        <Link href={`/u/${review.user.id}`} className="font-medium text-ink">
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
+        <Link href={`/u/${review.user.id}`} style={{ fontFamily: FONT_SERIF, fontSize: 15, fontWeight: 700, color: PAPER.rule }}>
           {review.user.name ?? "익명"}
         </Link>
-        <span>{review.createdAt.toLocaleDateString("ko-KR")}</span>
+        <span style={monoLabel}>{review.createdAt.toLocaleDateString("ko-KR")}</span>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div style={{ display: "flex", alignItems: "center", gap: 10, paddingBottom: 28, marginBottom: 28, borderBottom: `1px solid ${PAPER.hair}` }}>
         <form action={toggleLike.bind(null, review.id)}>
-          <SubmitButton
-            pendingText="처리 중..."
-            className={
-              isLiked
-                ? "rounded border border-red-300 bg-red-50 text-red-600 px-3 py-1.5 text-sm disabled:opacity-50"
-                : "rounded border border-leaf/25 px-3 py-1.5 text-sm disabled:opacity-50"
-            }
-          >
+          <SubmitButton pendingText="처리 중..." style={pillButtonStyle(isLiked)}>
             {isLiked ? "♥" : "♡"} 좋아요 {review._count.likes}
           </SubmitButton>
         </form>
 
         {isOwner && (
           <>
-            <Link
-              href={`/reviews/${review.id}/edit`}
-              className="text-sm rounded border border-leaf/25 px-3 py-1.5"
-            >
+            <Link href={`/reviews/${review.id}/edit`} style={pillButtonStyle(false)}>
               수정
             </Link>
             <form action={deleteReview.bind(null, review.id)}>
-              <SubmitButton
-                pendingText="삭제 중..."
-                className="text-sm rounded border border-red-300 text-red-600 px-3 py-1.5 disabled:opacity-50"
-              >
+              <SubmitButton pendingText="삭제 중..." style={dangerPillStyle}>
                 삭제
               </SubmitButton>
             </form>
@@ -136,54 +170,39 @@ export default async function ReviewDetailPage({ params }: Params) {
         )}
       </div>
 
-      <section className="flex flex-col gap-3 pt-4 border-t border-leaf/20">
-        <h2 className="text-sm font-semibold">댓글 {comments.length}개</h2>
+      <section>
+        <h2 style={{ fontFamily: FONT_SERIF, fontSize: 18, fontWeight: 700, margin: "0 0 16px", color: PAPER.rule }}>
+          댓글 {comments.length}개
+        </h2>
 
         {viewerId && (
-          <form
-            action={addComment.bind(null, review.id)}
-            className="flex gap-2"
-          >
-            <input
-              name="content"
-              required
-              placeholder="댓글을 남겨보세요"
-              className="flex-1 rounded border border-leaf/25 px-3 py-2 text-sm"
-            />
-            <SubmitButton
-              pendingText="등록 중..."
-              className="rounded bg-leaf hover:bg-leaf-dark text-white px-3 text-sm disabled:opacity-50"
-            >
+          <form action={addComment.bind(null, review.id)} style={{ display: "flex", gap: 8, marginBottom: 22 }}>
+            <input name="content" required placeholder="댓글을 남겨보세요" style={{ ...inputStyle, flex: 1 }} />
+            <SubmitButton pendingText="등록 중..." style={pillButtonStyle(true)}>
               등록
             </SubmitButton>
           </form>
         )}
 
-        <ul className="flex flex-col gap-3">
+        <ul style={{ display: "flex", flexDirection: "column", gap: 16, padding: 0, listStyle: "none" }}>
           {comments.map((comment) => (
-            <li key={comment.id} className="text-sm">
-              <div className="flex items-center gap-2">
-                <Link
-                  href={`/u/${comment.user.id}`}
-                  className="font-medium text-ink"
-                >
+            <li key={comment.id}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
+                <Link href={`/u/${comment.user.id}`} style={{ fontFamily: FONT_SERIF, fontSize: 13.5, fontWeight: 700, color: PAPER.rule }}>
                   {comment.user.name ?? "익명"}
                 </Link>
-                <span className="text-xs text-ink/40">
-                  {comment.createdAt.toLocaleDateString("ko-KR")}
-                </span>
+                <span style={monoLabel}>{comment.createdAt.toLocaleDateString("ko-KR")}</span>
                 {viewerId === comment.userId && (
                   <form action={deleteComment.bind(null, comment.id)}>
-                    <SubmitButton
-                      pendingText="삭제 중..."
-                      className="text-xs text-red-500 disabled:opacity-50"
-                    >
+                    <SubmitButton pendingText="삭제 중..." style={{ ...monoLabel, background: "none", border: "none", padding: 0, cursor: "pointer", color: "#8C3B2E" }}>
                       삭제
                     </SubmitButton>
                   </form>
                 )}
               </div>
-              <p className="text-ink">{comment.content}</p>
+              <p style={{ fontFamily: "'IBM Plex Sans KR',sans-serif", fontSize: 13.5, lineHeight: 1.7, color: "#3A362F", margin: 0 }}>
+                {comment.content}
+              </p>
             </li>
           ))}
         </ul>

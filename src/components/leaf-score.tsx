@@ -1,4 +1,5 @@
 import LeafIcon from "@/components/leaf-icon";
+import { ACCENT, PAPER } from "@/components/booklog-landing/theme";
 
 export default function LeafScore({
   score,
@@ -12,19 +13,20 @@ export default function LeafScore({
   return (
     <span
       aria-label={`잎점수 ${score}잎`}
-      className={`relative inline-flex select-none text-leaf-light ${className}`}
+      className={`relative inline-flex select-none ${className}`}
+      style={{ color: PAPER.hair }}
     >
       <span className="flex gap-0.5">
         {Array.from({ length: 5 }).map((_, i) => (
-          <LeafIcon key={i} className="h-[1em] w-[1em]" />
+          <LeafIcon key={i} className="h-[1em] w-[1em]" showVeins={false} />
         ))}
       </span>
       <span
-        className="absolute inset-0 flex gap-0.5 overflow-hidden text-leaf"
-        style={{ width: pct }}
+        className="absolute inset-0 flex gap-0.5 overflow-hidden"
+        style={{ width: pct, color: ACCENT }}
       >
         {Array.from({ length: 5 }).map((_, i) => (
-          <LeafIcon key={i} className="h-[1em] w-[1em]" />
+          <LeafIcon key={i} className="h-[1em] w-[1em]" showVeins={false} />
         ))}
       </span>
     </span>

@@ -1,23 +1,19 @@
-import { signIn } from "@/lib/auth";
+import { signInWithGoogle } from "@/lib/actions/auth";
+import { FONT_SERIF, PAPER, ctaButtonStyle, monoLabel } from "@/components/booklog-landing/theme";
 
 export default function LoginPage() {
   return (
-    <div className="flex flex-col items-center gap-6 py-20 text-center">
-      <h1 className="text-2xl font-semibold">북로그에 로그인</h1>
-      <p className="text-ink/55">
-        읽은 책의 후기를 기록하고 다른 사람들과 공유해보세요.
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", padding: "48px 0 40px" }}>
+      <div style={{ ...monoLabel, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 18 }}>Login</div>
+      <h1 style={{ fontFamily: FONT_SERIF, fontSize: 34, fontWeight: 700, margin: "0 0 14px", letterSpacing: "-0.01em", color: PAPER.rule }}>
+        북로그에 로그인
+      </h1>
+      <p style={{ fontFamily: "'IBM Plex Sans KR',sans-serif", fontSize: 14.5, lineHeight: 1.75, color: "#3A362F", margin: "0 0 32px", maxWidth: 340 }}>
+        읽은 책의 후기를 기록하고, 아는 사람들과 편하게 공유해보세요.
       </p>
-      <form
-        action={async () => {
-          "use server";
-          await signIn("google", { redirectTo: "/" });
-        }}
-      >
-        <button
-          type="submit"
-          className="rounded bg-leaf hover:bg-leaf-dark text-white px-5 py-2.5 font-medium"
-        >
-          Google로 로그인
+      <form action={signInWithGoogle}>
+        <button type="submit" style={ctaButtonStyle}>
+          Google로 시작하기 →
         </button>
       </form>
     </div>
