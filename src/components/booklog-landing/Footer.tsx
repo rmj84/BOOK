@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SUPPORT_URL } from "@/lib/site";
 import { FONT_MONO, FONT_SERIF, PAPER } from "./theme";
 
 export function Footer() {
@@ -19,6 +20,11 @@ export function Footer() {
           <Link href="/shelf">모두의 책장</Link>
           <Link href="/reviews/new">후기 쓰기</Link>
           <a href="#leaf-score">잎점수 안내</a>
+          {SUPPORT_URL && (
+            <a href={SUPPORT_URL} target="_blank" rel="noopener noreferrer">
+              🍃 후원하기
+            </a>
+          )}
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           <span style={{ color: PAPER.rule, fontWeight: 500 }}>정보</span>
