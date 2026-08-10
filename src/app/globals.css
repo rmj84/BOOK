@@ -50,6 +50,21 @@ body {
   font-family: var(--font-sans);
 }
 
+/* 버튼/링크를 눌렀을 때 즉각적인 시각 반응을 준다 (디자인 자체는 그대로 두고,
+   누르는 동안에만 살짝 어두워지고 축소되는 순간적인 상태만 추가). 모바일에서
+   기본 tap-highlight는 브라우저마다 표시가 들쭉날쭉해서 일관된 자체 효과로 대체. */
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.1s ease, transform 0.1s ease;
+}
+
+a:active,
+button:active {
+  opacity: 0.55;
+  transform: scale(0.97);
+}
+
 /* 1a 에디토리얼 헤더는 데스크톱 폭 기준 고정 padding/gap의 인라인 스타일로 짜여있어
    좁은 모바일 화면에서 nav 항목이 뷰포트 밖으로 밀려나 탭이 안 되는 문제가 있었다.
    인라인 style이 항상 이기므로 !important로 좁은 화면에서만 덮어쓴다. */
