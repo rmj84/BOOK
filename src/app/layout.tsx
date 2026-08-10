@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Nanum_Pen_Script, Geist_Mono } from "next/font/google";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 // Google Fonts는 나눔손글씨 펜 계열을 별도 "korean" 서브셋으로 나누지 않고
@@ -16,8 +17,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "북로그 | 책 후기 공유",
-  description: "읽은 책의 후기를 기록하고 공유하는 서비스",
+  description:
+    "북로그는 읽은 책을 기록하고 공유하는 독서 다이어리 앱입니다. 책 후기와 잎점수(평점)를 남기고, 친구를 팔로우해 서로의 책장을 구경하고, 취향에 맞는 책을 추천받아보세요.",
+  openGraph: {
+    title: "북로그 | 책 후기 공유",
+    description: "읽은 책의 후기를 기록하고 공유하는 독서 다이어리",
+    siteName: "북로그",
+    locale: "ko_KR",
+    type: "website",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
