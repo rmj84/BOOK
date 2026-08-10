@@ -4,6 +4,7 @@ import { FONT_SERIF, PAPER, monoLabel } from "./theme";
 export function CtaBand() {
   return (
     <div
+      className="ed-px-32"
       style={{
         background: PAPER.rule,
         color: PAPER.sheet,
@@ -19,7 +20,7 @@ export function CtaBand() {
         <div style={{ ...monoLabel, letterSpacing: "0.14em", textTransform: "uppercase", color: "#A8A296", marginBottom: 14 }}>
           Booklog
         </div>
-        <h2 style={{ fontFamily: FONT_SERIF, fontSize: 40, lineHeight: 1.26, fontWeight: 400, fontStyle: "italic", margin: 0, color: PAPER.sheet, letterSpacing: "-0.01em" }}>
+        <h2 className="ed-h2-lg" style={{ fontFamily: FONT_SERIF, fontSize: 40, lineHeight: 1.26, fontWeight: 400, fontStyle: "italic", margin: 0, color: PAPER.sheet, letterSpacing: "-0.01em" }}>
           그 책, 다음엔
           <br />뭐 읽지?
         </h2>

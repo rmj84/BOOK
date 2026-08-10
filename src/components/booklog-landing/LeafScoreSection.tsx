@@ -12,6 +12,7 @@ export function LeafScoreSection() {
   return (
     <div
       id="leaf-score"
+      className="ed-grid-1"
       style={{
         display: "grid",
         gridTemplateColumns: "1.1fr 1fr",
@@ -19,9 +20,9 @@ export function LeafScoreSection() {
         scrollMarginTop: 88,
       }}
     >
-      <div style={{ padding: "44px 32px", borderRight: `1px solid ${PAPER.hair}` }}>
+      <div className="ed-px-32" style={{ padding: "44px 32px", borderRight: `1px solid ${PAPER.hair}` }}>
         <div style={{ ...monoLabel, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 16 }}>잎점수</div>
-        <h2 style={{ fontFamily: FONT_SERIF, fontSize: 38, lineHeight: 1.28, fontWeight: 700, margin: "0 0 16px", letterSpacing: "-0.015em" }}>
+        <h2 className="ed-h2-lg" style={{ fontFamily: FONT_SERIF, fontSize: 38, lineHeight: 1.28, fontWeight: 700, margin: "0 0 16px", letterSpacing: "-0.015em" }}>
           별점 대신 잎점수예요
         </h2>
         <p style={{ fontFamily: "'IBM Plex Sans KR',sans-serif", fontSize: 15, lineHeight: 1.78, color: "#3A362F", margin: "0 0 22px", maxWidth: 420 }}>
@@ -32,7 +33,7 @@ export function LeafScoreSection() {
           <span style={{ fontFamily: FONT_SERIF, fontSize: 20, fontWeight: 700, marginLeft: 4 }}>{rating}잎</span>
         </div>
       </div>
-      <div style={{ padding: "44px 32px", display: "flex", flexDirection: "column" }}>
+      <div className="ed-px-32" style={{ padding: "44px 32px", display: "flex", flexDirection: "column" }}>
         <div style={{ ...monoLabel, letterSpacing: "0.12em", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
           <LeafIcon />
           작성 팁

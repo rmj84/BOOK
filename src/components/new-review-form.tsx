@@ -242,6 +242,7 @@ export default function NewReviewForm({ feed = [] }: { feed?: FeedReview[] }) {
       </h1>
 
       <div
+        className="ed-grid-1"
         style={{
           display: "grid",
           gridTemplateColumns: "1.35fr 1fr",

@@ -3,7 +3,7 @@ import { FONT_MONO, FONT_SERIF, PAPER } from "./theme";
 
 export function Footer() {
   return (
-    <div style={{ padding: "40px 32px", display: "flex", justifyContent: "space-between", gap: 40, flexWrap: "wrap" }}>
+    <div className="ed-px-32" style={{ padding: "40px 32px", display: "flex", justifyContent: "space-between", gap: 40, flexWrap: "wrap" }}>
       <div style={{ maxWidth: 520 }}>
         <div style={{ fontFamily: FONT_SERIF, fontSize: 18, fontWeight: 700, letterSpacing: "0.03em", marginBottom: 12 }}>
           BOOKLOG
@@ -13,7 +13,7 @@ export function Footer() {
           팔로우해 서로의 책장을 구경하고, 취향에 맞는 책을 추천받아보세요.
         </p>
       </div>
-      <div style={{ display: "flex", gap: 48, fontFamily: FONT_MONO, fontSize: 11, letterSpacing: "0.08em", color: "#57534A" }}>
+      <div className="ed-footer-links" style={{ display: "flex", gap: 48, fontFamily: FONT_MONO, fontSize: 11, letterSpacing: "0.08em", color: "#57534A" }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           <span style={{ color: PAPER.rule, fontWeight: 500 }}>서비스</span>
           <Link href="/shelf">모두의 책장</Link>

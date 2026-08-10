@@ -16,6 +16,7 @@ export default function AppShell({
 }) {
   return (
     <div
+      className="ed-shell-outer"
       style={{
         flex: 1,
         width: "100%",
@@ -37,7 +38,7 @@ export default function AppShell({
         }}
       >
         <Header user={user} />
-        <main style={{ padding: "36px 32px" }}>{children}</main>
+        <main className="ed-shell-main" style={{ padding: "36px 32px" }}>{children}</main>
       </div>
     </div>
   );

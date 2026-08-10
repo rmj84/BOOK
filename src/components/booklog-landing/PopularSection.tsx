@@ -11,6 +11,7 @@ export function PopularSection({ books }: { books: LandingBook[] }) {
   return (
     <>
       <div
+        className="ed-px-32 ed-row-wrap"
         style={{
           display: "flex",
           alignItems: "center",
@@ -31,6 +32,7 @@ export function PopularSection({ books }: { books: LandingBook[] }) {
           <Link
             key={book.id}
             href={`/books/${book.id}`}
+            className="ed-px-32"
             style={{
               display: "flex",
               alignItems: "center",
@@ -64,7 +66,7 @@ export function PopularSection({ books }: { books: LandingBook[] }) {
               )}
             </div>
             {typeof book.reviewCount === "number" && (
-              <div style={{ ...monoLabel, whiteSpace: "nowrap" }}>후기 {book.reviewCount}</div>
+              <div className="ed-hide-mobile" style={{ ...monoLabel, whiteSpace: "nowrap" }}>후기 {book.reviewCount}</div>
             )}
             <div style={{ display: "flex", width: 82, justifyContent: "flex-end" }}>
               <LeafMeter rating={book.avgRating} size={13} gap={3} />

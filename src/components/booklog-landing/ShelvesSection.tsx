@@ -8,16 +8,16 @@ export function ShelvesSection({ shelves }: { shelves: FeaturedShelf[] }) {
 
   return (
     <>
-      <div style={{ padding: "22px 32px", borderBottom: `${RULE_WEIGHT}px solid ${PAPER.rule}` }}>
-        <div style={{ display: "flex", alignItems: "baseline", gap: 14 }}>
+      <div className="ed-px-32" style={{ padding: "22px 32px", borderBottom: `${RULE_WEIGHT}px solid ${PAPER.rule}` }}>
+        <div style={{ display: "flex", alignItems: "baseline", gap: 14, flexWrap: "wrap" }}>
           <span style={{ fontFamily: FONT_SERIF, fontSize: 22, fontWeight: 700 }}>모두의 책장</span>
           <span style={monoLabel}>아직 팔로우가 없다면, 먼저 구경부터 해보세요</span>
         </div>
       </div>
       <div style={{ borderBottom: `${RULE_WEIGHT}px solid ${PAPER.rule}` }}>
         {shelves.map((shelf, idx) => (
-          <div key={shelf.user.id} style={{ padding: "24px 32px", borderBottom: idx < shelves.length - 1 ? `1px solid ${PAPER.hair}` : "none" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, marginBottom: 16 }}>
+          <div key={shelf.user.id} className="ed-px-32" style={{ padding: "24px 32px", borderBottom: idx < shelves.length - 1 ? `1px solid ${PAPER.hair}` : "none" }}>
+            <div className="ed-row-wrap" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, marginBottom: 16 }}>
               <Link href={`/u/${shelf.user.id}`} style={{ display: "flex", alignItems: "center", gap: 12, color: PAPER.rule }}>
                 {shelf.user.image ? (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -47,7 +47,7 @@ export function ShelvesSection({ shelves }: { shelves: FeaturedShelf[] }) {
                 </form>
               </div>
             </div>
-            <div style={{ display: "flex", alignItems: "flex-end", gap: 14, minHeight: 112, padding: "0 2px" }}>
+            <div style={{ display: "flex", alignItems: "flex-end", gap: 14, minHeight: 112, padding: "0 2px", overflowX: "auto" }}>
               {shelf.books.map((book, k) => {
                 const h = shelfBookHeight(idx, k);
                 const w = Math.round(h * 0.62);

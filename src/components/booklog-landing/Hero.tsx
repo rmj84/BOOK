@@ -17,11 +17,12 @@ export function Hero({
   isLoggedIn?: boolean;
 }) {
   return (
-    <div style={{ padding: "56px 32px 26px", borderBottom: `${RULE_WEIGHT}px solid ${PAPER.rule}` }}>
+    <div className="ed-px-32" style={{ padding: "56px 32px 26px", borderBottom: `${RULE_WEIGHT}px solid ${PAPER.rule}` }}>
       <div style={{ ...monoLabel, letterSpacing: "0.16em", textTransform: "uppercase", marginBottom: 24 }}>
         읽은 책을 기록하고 공유하는 독서 다이어리
       </div>
       <h1
+        className="ed-hero-h1"
         style={{
           fontFamily: FONT_SERIF,
           fontSize: 84,
@@ -38,7 +39,7 @@ export function Hero({
         <span style={{ fontStyle: "italic", fontWeight: 400, color: ACCENT }}>같이 읽어요</span>
       </h1>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr 1fr", gap: 34, paddingBottom: 36 }}>
+      <div className="ed-grid-1" style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr 1fr", gap: 34, paddingBottom: 36 }}>
         <p style={{ fontFamily: "'IBM Plex Sans KR',sans-serif", fontSize: 15.5, lineHeight: 1.78, color: "#3A362F", margin: 0 }}>
           읽은 책에 잎을 하나씩 꽂고, 동기·친구들과 감상을 나눠보세요. 완벽한 서평 아니어도 괜찮아요, 한 줄이면
           충분해요.

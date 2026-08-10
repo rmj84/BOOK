@@ -29,6 +29,7 @@ export function AnonymousLanding({
 
   return (
     <div
+      className="ed-shell-outer"
       style={{
         position: "relative",
         left: "50%",

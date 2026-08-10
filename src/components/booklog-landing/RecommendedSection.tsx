@@ -19,6 +19,7 @@ export function RecommendedSection({ books }: { books: LandingBook[] }) {
   return (
     <>
       <div
+        className="ed-px-32 ed-row-wrap"
         style={{
           display: "flex",
           alignItems: "center",
@@ -28,7 +29,7 @@ export function RecommendedSection({ books }: { books: LandingBook[] }) {
           borderBottom: `${RULE_WEIGHT}px solid ${PAPER.rule}`,
         }}
       >
-        <div style={{ display: "flex", alignItems: "baseline", gap: 14 }}>
+        <div style={{ display: "flex", alignItems: "baseline", gap: 14, flexWrap: "wrap" }}>
           <span style={{ fontFamily: FONT_SERIF, fontSize: 22, fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 9 }}>
             <LeafIcon />
             취향 저격 추천
@@ -39,9 +40,9 @@ export function RecommendedSection({ books }: { books: LandingBook[] }) {
           더보기 →
         </Link>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: `repeat(${shown.length + 1}, 1fr)`, borderBottom: `${RULE_WEIGHT}px solid ${PAPER.rule}` }}>
+      <div className="ed-grid-2" style={{ display: "grid", gridTemplateColumns: `repeat(${shown.length + 1}, 1fr)`, borderBottom: `${RULE_WEIGHT}px solid ${PAPER.rule}` }}>
         {shown.map((book, i) => (
-          <Link key={book.id} href={`/books/${book.id}`} style={{ padding: "26px 24px", borderRight: `1px solid ${PAPER.hair}`, display: "block" }}>
+          <Link key={book.id} href={`/books/${book.id}`} className="ed-px-24" style={{ padding: "26px 24px", borderRight: `1px solid ${PAPER.hair}`, display: "block" }}>
             {book.coverUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -66,8 +67,8 @@ export function RecommendedSection({ books }: { books: LandingBook[] }) {
             </div>
           </Link>
         ))}
-        <div style={{ padding: "26px 24px", background: PAPER.rule, color: PAPER.sheet, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-          <div style={{ fontFamily: FONT_SERIF, fontSize: 30, lineHeight: 1.35, fontWeight: 400, fontStyle: "italic", marginBottom: 18 }}>
+        <div className="ed-px-24" style={{ padding: "26px 24px", background: PAPER.rule, color: PAPER.sheet, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+          <div className="ed-h2-lg" style={{ fontFamily: FONT_SERIF, fontSize: 30, lineHeight: 1.35, fontWeight: 400, fontStyle: "italic", marginBottom: 18 }}>
             한 줄이면 충분해요
           </div>
           <Link href="/reviews/new" style={{ ...monoLabel, letterSpacing: "0.1em", color: "#A8A296" }}>

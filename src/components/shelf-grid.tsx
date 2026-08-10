@@ -132,7 +132,7 @@ export default function ShelfGrid({
             const following = followingSet.has(person.user.id);
             return (
               <div key={person.user.id} style={{ padding: "24px 0", borderBottom: idx < visible.length - 1 ? `1px solid ${PAPER.hair}` : "none" }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, marginBottom: 16 }}>
+                <div className="ed-row-wrap" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, marginBottom: 16 }}>
                   <Link href={`/u/${person.user.id}`} style={{ display: "flex", alignItems: "center", gap: 12, color: PAPER.rule }}>
                     {person.user.image ? (
                       // eslint-disable-next-line @next/next/no-img-element
@@ -168,7 +168,7 @@ export default function ShelfGrid({
                     </div>
                   )}
                 </div>
-                <div style={{ display: "flex", alignItems: "flex-end", gap: 14, minHeight: 112, padding: "0 2px" }}>
+                <div style={{ display: "flex", alignItems: "flex-end", gap: 14, minHeight: 112, padding: "0 2px", overflowX: "auto" }}>
                   {person.books.map((bk, k) => {
                     const h = shelfBookHeight(idx, k);
                     const w = Math.round(h * 0.62);
